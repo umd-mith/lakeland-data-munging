@@ -271,4 +271,5 @@ Notes about the schema:
 * Collections are sets of Items. Both are optional.
 * Files can be related to other Files in the case of derivates that are made.
 * Items and Collections can have multiple People, Places, Subjects.
+* Not all the columns are represented (just the tables). The expectation is that only the ones that we expect to need for the archive application will be brought forward.
 
