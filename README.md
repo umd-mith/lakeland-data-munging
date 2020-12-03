@@ -6,9 +6,7 @@ project.
 
 ## Bases
 
-When commencing this work there are three Airtable Bases. The goal is to
-consolidate them into one and provide a shared approach to modeling files which
-metadata can be layered on top of.
+There are currently three Airtable Bases containing information about records collected during the Lakeland project. The goal is to consolidate them into one and provide a shared approach to modeling the files and their storage which metadata can be layered on top of.
 
 * Lakeland Digital Archive: This is the primary Airtable base that has been used to curate metadata related to digital objects.
 * Lakeland Digitization Tracking: This base was used during Lakeland
