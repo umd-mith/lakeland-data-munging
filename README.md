@@ -265,5 +265,10 @@ But as the previous section describes the two databases actually make similar se
 Notes about the schema:
 
 * Folder metadata from LDT become Accession entries.
-
+* Files in S3, Omeka and ASA references become a Dropbox path.
+* Ordering of Files within Items is done using the ordering of the links between Items and Files.
+* Project Staff are People with a property set to true.
+* Collections are sets of Items. Both are optional.
+* Files can be related to other Files in the case of derivates that are made.
+* Items and Collections can have multiple People, Places, Subjects.
 

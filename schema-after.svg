@@ -13,9 +13,26 @@
    version="1.1"
    id="svg1465"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
-   sodipodi:docname="schema-after.svg">
+   sodipodi:docname="schema-after.svg"
+   inkscape:export-filename="/home/ed/Projects/lakeland-data-munging/schema-after.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
   <defs
      id="defs1459">
+    <marker
+       style="overflow:visible;"
+       id="marker3230"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.8) rotate(180) translate(12.5,0)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path3228" />
+    </marker>
     <marker
        style="overflow:visible;"
        id="marker2980"
@@ -188,8 +205,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="363.34048"
-     inkscape:cy="686.50673"
+     inkscape:cx="392.08144"
+     inkscape:cy="667.65782"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -411,12 +428,11 @@
        inkscape:connection-start="#rect10-6-2-37-7"
        inkscape:connection-end="#rect10-6-2-37" />
     <path
-       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker2602)"
-       d="m 118.12165,174.88362 19.86272,5.22455"
+       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.363134px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker2602)"
+       d="m 118.20702,174.88113 19.456,10.04716"
        id="path2598"
        inkscape:connector-type="polyline"
-       inkscape:connector-curvature="0"
-       inkscape:connection-end="#rect10-6-2-6" />
+       inkscape:connector-curvature="0" />
     <path
        style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker2650)"
        d="M 118.12165,174.88362 138.097,170.03054"
@@ -457,5 +473,10 @@
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
        inkscape:connection-end="#rect10-6-2-6" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker3230)"
+       d="m 112.5395,205.17467 c 29.41841,14.87811 17.80203,-36.63639 0.32513,-15.9019"
+       id="path3226"
+       sodipodi:nodetypes="cc" />
   </g>
 </svg>
