@@ -14,7 +14,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
-   sodipodi:docname="diagram-before.svg"
+   sodipodi:docname="schema-before.svg"
    inkscape:export-filename="/home/ed/Projects/lakeland-data-munging/diagram-before.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
@@ -421,6 +421,32 @@
          stdDeviation="1.8803773e-08"
          id="feGaussianBlur986-6" />
     </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter984-3-3"
+       x="-2.4039344e-09"
+       width="1"
+       y="-1.4344633e-08"
+       height="1">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.8803773e-08"
+         id="feGaussianBlur986-6-6" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter984-3-6"
+       x="-2.4039344e-09"
+       width="1"
+       y="-1.4344633e-08"
+       height="1">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.8803773e-08"
+         id="feGaussianBlur986-6-2" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -429,13 +455,13 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.49497475"
-     inkscape:cx="317.92853"
-     inkscape:cy="887.49242"
+     inkscape:zoom="1.979899"
+     inkscape:cx="246.93841"
+     inkscape:cy="209.87541"
      inkscape:document-units="mm"
-     inkscape:current-layer="g3233"
+     inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
-     showgrid="false"
+     showgrid="true"
      inkscape:window-width="2048"
      inkscape:window-height="1081"
      inkscape:window-x="0"
@@ -602,12 +628,12 @@
          y="25.473007"
          style="stroke-width:0.264583" /></text>
     <rect
-       style="fill:#ccebcc;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583;stroke-opacity:1;image-rendering:auto"
+       style="fill:#ccebcc;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.198437;stroke-opacity:1;image-rendering:auto"
        id="rect10-8-7"
-       width="37.516613"
-       height="16.087744"
-       x="81.054077"
-       y="30.748695" />
+       width="28.137461"
+       height="12.065808"
+       x="85.743652"
+       y="32.759663" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:4.23333px;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264999;stroke-miterlimit:4;stroke-dasharray:none;filter:url(#filter984-3)"
@@ -621,7 +647,7 @@
          id="tspan996-5">Amazon S3</tspan></text>
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow2Lend)"
-       d="m 118.07271,93.132899 11.7679,4.27504"
+       d="m 118.07271,93.1329 11.7679,4.275039"
        id="path54"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
@@ -629,7 +655,7 @@
        inkscape:connection-end="#rect10-61" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#Arrow2Lstart);marker-end:url(#marker1212)"
-       d="m 148.41448,120.54705 0.0935,-8.28073"
+       d="m 148.41449,120.54705 0.0935,-8.28073"
        id="path62"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
@@ -637,7 +663,7 @@
        inkscape:connection-end="#rect10-61" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 99.314409,86.318385 v 0"
+       d="m 99.314405,86.318385 v 0"
        id="path55"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
@@ -645,7 +671,7 @@
        inkscape:connection-end="#rect10" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker1246)"
-       d="m 99.398693,78.274513 0.32941,-31.438074"
+       d="M 99.39869,78.274513 99.749171,44.825471"
        id="path57"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
@@ -653,7 +679,7 @@
        inkscape:connection-end="#rect10-8-7" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker1524)"
-       d="M 67.824747,67.724379 85.691804,78.274513"
+       d="M 67.824746,67.724379 85.691802,78.274513"
        id="path1390"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
@@ -795,7 +821,7 @@
          id="tspan2028"
          x="111.69668"
          y="254.16937"
-         style="stroke-width:0.264583"></tspan></text>
+         style="stroke-width:0.264583" /></text>
     <rect
        style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583;stroke-opacity:1;image-rendering:auto"
        id="rect10-6-0"
@@ -842,7 +868,7 @@
          id="tspan2054"
          x="74.266029"
          y="184.46655"
-         style="stroke-width:0.264583"></tspan></text>
+         style="stroke-width:0.264583" /></text>
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker2200)"
        d="m 107.50196,198.37421 0.005,8.26831"
@@ -877,7 +903,7 @@
        inkscape:connection-end="#rect10-6-7" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker2428)"
-       d="m 126.52548,260.12885 24.72045,-4.55078"
+       d="m 126.52548,260.12885 24.72045,-4.55077"
        id="path2294"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
@@ -1001,5 +1027,59 @@
        id="path3521"
        inkscape:connector-type="orthogonal"
        inkscape:connector-curvature="0" />
+    <rect
+       style="fill:#ccebcc;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.198437;stroke-opacity:1;image-rendering:auto"
+       id="rect10-8-7-7"
+       width="28.137459"
+       height="12.065808"
+       x="117.38338"
+       y="27.621693" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:4.23333px;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264999;stroke-miterlimit:4;stroke-dasharray:none;filter:url(#filter984-3-3)"
+       x="124.82931"
+       y="35.305195"
+       id="text872-5-5-5"
+       inkscape:transform-center-x="1.2332668"
+       inkscape:transform-center-y="-2.9962032"><tspan
+         sodipodi:role="line"
+         x="124.82931"
+         y="35.305195"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:0.98597;stroke-width:0.264999;stroke-miterlimit:4;stroke-dasharray:none"
+         id="tspan996-5-3">Omeka</tspan></text>
+    <rect
+       style="fill:#ccebcc;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.198437;stroke-opacity:1;image-rendering:auto"
+       id="rect10-8-7-9"
+       width="28.137461"
+       height="12.065808"
+       x="51.237541"
+       y="27.621693" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:4.23333px;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264999;stroke-miterlimit:4;stroke-dasharray:none;filter:url(#filter984-3-6)"
+       x="55.997601"
+       y="35.02058"
+       id="text872-5-5-1"><tspan
+         sodipodi:role="line"
+         x="55.997601"
+         y="35.02058"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:0.98597;stroke-width:0.264999;stroke-miterlimit:4;stroke-dasharray:none"
+         id="tspan996-5-2">ASA Site</tspan></text>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker3667)"
+       d="M 104.22312,78.274513 127.77057,39.687501"
+       id="path447"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect10"
+       inkscape:connection-end="#rect10-8-7-7" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker3531)"
+       d="M 94.12,78.274513 69.202076,39.687501"
+       id="path451"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect10"
+       inkscape:connection-end="#rect10-8-7-9" />
   </g>
 </svg>

@@ -258,4 +258,12 @@ The original goal of this refactoring wasn't to alter the database schema greatl
 But as the previous section describes the two databases actually make similar semantic claims about the digital content, but they use different data structures. I think it makes sense to have a singular way of making those assertions and to port the existing data over into that schema because:
 
 1. It will be easier to express and maintain the relationships between to the files and the metadata if there is one rather multiple ways of doing it.
-2. It will be easier to build applications that use the data if they don't have to look for data in multiple ways, but can expect a single database schema for the archival objects..
+2. It will be easier to build applications that use the data if they don't have to look for data in multiple ways, but can expect a single database schema for the archival objects.
+
+<img src="schema-after.png">
+
+Notes about the schema:
+
+* Folder metadata from LDT become Accession entries.
+
+
