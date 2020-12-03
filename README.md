@@ -238,3 +238,24 @@ This is an inventory of the tables in all these bases, and their columns.
 * format: mime type
 * online submission: text (yes, no)
 * posting_consent: text (yes, no) sparse
+
+## Analysis
+
+The Lakeland Digital Archive (LDA) and Lakeland Digitization Tracking (LDT) databases are the ones that need to be merged. They have some things in common, but take different approaches. Here is a summary of some of the simliarities and differences.
+
+* LDT is all oriented around image files, whereas LDA is oriented towards multiple media types (audio, images, text).
+* LDT has hierarchy (folder, items, images) whereas LDA is flat record per file.
+* LDT and LDA both model subjects, people, locations. LDA has a single table for all of them, whereas LDT has separate tables for each type.
+* LDA is linked to the file system via a naming convention involving the folder, item and image name. LDT is explicitly linked to a URL (S3 bucket).
+* LDA models some processing information in the Digital Objects and Resource Locations tables. LDT has a separate QA table that is linked to the Folders table.
+
+<img src="schema-before.png">
+
+## Proposed Merge
+
+The original goal of this refactoring wasn't to alter the database schema greatly but rather to introduce a single way of modeling files that the metadata can attach to. We could in theory keep these two databases the way they are and then attach them to a third database that would be about the files.
+
+But as the previous section describes the two databases actually make similar semantic claims about the digital content, but they use different data structures. I think it makes sense to have a singular way of making those assertions and to port the existing data over into that schema because:
+
+1. It will be easier to express and maintain the relationships between to the files and the metadata if there is one rather multiple ways of doing it.
+2. It will be easier to build applications that use the data if they don't have to look for data in multiple ways, but can expect a single database schema for the archival objects..
