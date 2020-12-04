@@ -15,7 +15,7 @@
    id="svg8"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
    sodipodi:docname="schema-before.svg"
-   inkscape:export-filename="/home/ed/Projects/lakeland-data-munging/diagram-before.png"
+   inkscape:export-filename="/home/ed/Projects/lakeland-data-munging/schema-before.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
   <defs
@@ -456,7 +456,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="246.93841"
+     inkscape:cx="373.71255"
      inkscape:cy="209.87541"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -671,7 +671,7 @@
        inkscape:connection-end="#rect10" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker1246)"
-       d="M 99.39869,78.274513 99.749171,44.825471"
+       d="M 99.398689,78.274513 99.74917,44.825471"
        id="path57"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"

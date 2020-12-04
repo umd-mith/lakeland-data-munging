@@ -241,12 +241,12 @@ This is an inventory of the tables in all these bases, and their columns.
 
 ## Analysis
 
-The Lakeland Digital Archive (LDA) and Lakeland Digitization Tracking (LDT) databases are the ones that need to be merged. They have some things in common, but take different approaches. Here is a summary of some of the simliarities and differences.
+The Lakeland Digital Archive (LDA) and Lakeland Digitization Tracking (LDT) databases are the ones that need to be merged. They have some things in common, but take different approaches. Here is a summary of some of the similarities and differences.
 
 * LDT is all oriented around image files, whereas LDA is oriented towards multiple media types (audio, images, text).
 * LDT has hierarchy (folder, items, images) whereas LDA is flat record per file.
 * LDT and LDA both model subjects, people, locations. LDA has a single table for all of them, whereas LDT has separate tables for each type.
-* LDA is linked to the file system via a naming convention involving the folder, item and image name. LDT is explicitly linked to a URL (S3 bucket), but there are some links to the ASA interviews, and the old Omeka site.
+* LDT is linked to the file system via a naming convention involving the folder, item and image name. LDA is explicitly linked to a URL (S3 bucket), but there are some links to the ASA interviews, and the old Omeka site.
 * LDA models some processing information in the Digital Objects and Resource Locations tables. LDT has a separate QA table that is linked to the Folders table.
 
 <img src="schema-before.png">
