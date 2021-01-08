@@ -1,0 +1,1000 @@
+{
+  "id": "appkzHtR3oryuaKfm",
+  "name": "Lakeland Digitization Tracking",
+  "tables": [
+    {
+      "id": "tblE8FaVk1fJcan9W",
+      "isEmpty": false,
+      "name": "Folder",
+      "nameForUrl": "folder",
+      "primaryColumnName": "Folder ID",
+      "columns": [
+        {
+          "id": "fldGhjkKgzqkqUGEd",
+          "name": "Folder ID",
+          "type": "formula",
+          "typeOptions": {
+            "formulaTextParsed": "RIGHT({column_value_fldULZBXCl7bEN6Fc}, 6)",
+            "dependencies": {
+              "referencedColumnIdsForValue": [
+                "fldULZBXCl7bEN6Fc"
+              ]
+            },
+            "resultType": "text"
+          }
+        },
+        {
+          "id": "fldl8enjbwiugWcoJ",
+          "name": "Donor Name",
+          "type": "foreignKey",
+          "typeOptions": {
+            "relationship": "many",
+            "foreignTableId": "tbltNKcyVSdGTrzBQ",
+            "symmetricColumnId": "fld2WAo2NerIHOK9y"
+          }
+        },
+        {
+          "id": "fldaMxGrhnzZxLV1a",
+          "name": "Date of donation",
+          "type": "date",
+          "typeOptions": {
+            "isDateTime": false,
+            "dateFormat": "Local"
+          }
+        },
+        {
+          "id": "fldULZBXCl7bEN6Fc",
+          "name": "Barcode",
+          "type": "barcode",
+          "typeOptions": null
+        },
+        {
+          "id": "fldueQ2izjzwjz9WR",
+          "name": "Number",
+          "type": "autoNumber",
+          "typeOptions": {
+            "maxUsedAutoNumber": 90
+          }
+        },
+        {
+          "id": "fldaX57FTYjLWLYNR",
+          "name": "Donor email",
+          "type": "text",
+          "typeOptions": {
+            "validatorName": "email"
+          }
+        },
+        {
+          "id": "fld9Bj4dBWvaDn73T",
+          "name": "Donor phone",
+          "type": "phone",
+          "typeOptions": null
+        },
+        {
+          "id": "fldOUec9pfZ7cTg9K",
+          "name": "Items count",
+          "type": "count",
+          "typeOptions": {
+            "relationColumnId": "fldqZDo9kPSkmKUZH",
+            "dependencies": {
+              "referencedColumnIdsForValue": [
+                "fldqZDo9kPSkmKUZH"
+              ]
+            },
+            "resultType": "number"
+          }
+        },
+        {
+          "id": "fldDgSBjtOXjSMNBP",
+          "name": "Consent Form",
+          "type": "multipleAttachment",
+          "typeOptions": null
+        },
+        {
+          "id": "fld8JwVpXyIeOa0cT",
+          "name": "QA",
+          "type": "foreignKey",
+          "typeOptions": {
+            "foreignTableId": "tbl62sGsBYIb2gv1P",
+            "symmetricColumnId": "fldzOXpBx1biUHAMr",
+            "relationship": "many"
+          }
+        },
+        {
+          "id": "fldqZDo9kPSkmKUZH",
+          "name": "Linked Items",
+          "type": "foreignKey",
+          "typeOptions": {
+            "foreignTableId": "tblU7ErRcmJjWxP2L",
+            "symmetricColumnId": "fldh04ZpzpHgLXH8u",
+            "relationship": "many"
+          }
+        },
+        {
+          "id": "fldVxDP74XIlt79px",
+          "name": "Folder Extracted",
+          "type": "formula",
+          "typeOptions": {
+            "formulaTextParsed": "RIGHT({column_value_fldULZBXCl7bEN6Fc}, 6)",
+            "dependencies": {
+              "referencedColumnIdsForValue": [
+                "fldULZBXCl7bEN6Fc"
+              ]
+            },
+            "resultType": "text"
+          }
+        },
+        {
+          "id": "fld6uctwYSYYW1Hgl",
+          "name": "Accession Notes",
+          "type": "multilineText",
+          "typeOptions": null
+        },
+        {
+          "id": "fldSFjy6dTOMjx0oB",
+          "name": "Inventory Form",
+          "type": "multipleAttachment",
+          "typeOptions": null
+        },
+        {
+          "id": "fldXV35NCP4Cuj0vH",
+          "name": "Has Accession Video",
+          "type": "checkbox",
+          "typeOptions": {
+            "color": "green",
+            "icon": "check"
+          }
+        },
+        {
+          "id": "fldmXOBEYwzXYcnKv",
+          "name": "Backed Up",
+          "type": "multiSelect",
+          "typeOptions": {
+            "choiceOrder": [
+              "sel2BlxHChbYcBTi8",
+              "seldLPnBJNUERFET2"
+            ],
+            "choices": {
+              "sel2BlxHChbYcBTi8": {
+                "id": "sel2BlxHChbYcBTi8",
+                "color": "teal",
+                "name": "MITH NAS"
+              },
+              "seldLPnBJNUERFET2": {
+                "id": "seldLPnBJNUERFET2",
+                "color": "yellow",
+                "name": "Portable HDD"
+              }
+            },
+            "disableColors": false
+          }
+        },
+        {
+          "id": "fldF2QUqgM54c8545",
+          "name": "Metadata Technician",
+          "type": "collaborator",
+          "typeOptions": {
+            "shouldNotify": true
+          }
+        },
+        {
+          "id": "fldyrfi0o1gaZXRxF",
+          "name": "Capture Station",
+          "type": "multiSelect",
+          "typeOptions": {
+            "choices": {
+              "selBRaC6a7N4erEIX": {
+                "id": "selBRaC6a7N4erEIX",
+                "color": "cyan",
+                "name": "Scanning Station (MacBook Pro)"
+              },
+              "selSWCd4FZpGM7j5m": {
+                "id": "selSWCd4FZpGM7j5m",
+                "name": "Scanning Station (iMac)",
+                "color": "tealDark"
+              },
+              "sel9y8p1Ky8OEnMRD": {
+                "id": "sel9y8p1Ky8OEnMRD",
+                "color": "blue",
+                "name": "Scanning Station (Black Dell Laptop)"
+              },
+              "selpBuCxVWYR1VHjo": {
+                "id": "selpBuCxVWYR1VHjo",
+                "color": "teal",
+                "name": "Camera Rephotography Station"
+              }
+            },
+            "disableColors": false,
+            "choiceOrder": [
+              "sel9y8p1Ky8OEnMRD",
+              "selBRaC6a7N4erEIX",
+              "selpBuCxVWYR1VHjo",
+              "selSWCd4FZpGM7j5m"
+            ]
+          }
+        },
+        {
+          "id": "fld59ECCUv09mz6qk",
+          "name": "Accession Interviewer",
+          "type": "text",
+          "typeOptions": null
+        },
+        {
+          "id": "fldrGik2NMTkBhiO7",
+          "name": "LastClass",
+          "type": "checkbox",
+          "typeOptions": {
+            "color": "green",
+            "icon": "check"
+          }
+        },
+        {
+          "id": "fldt413jePnMJk9p3",
+          "name": "Linked Images",
+          "type": "foreignKey",
+          "typeOptions": {
+            "foreignTableId": "tblqGhmEFYXUPcR15",
+            "symmetricColumnId": "fldtKLsQuD2aWu8mm",
+            "relationship": "many"
+          }
+        },
+        {
+          "id": "fldeAFxKFdhydJxl6",
+          "name": "File Path to Image Files (Jpegs)",
+          "type": "text",
+          "typeOptions": null
+        },
+        {
+          "id": "fldHalgR80lmw31Kq",
+          "name": "Images Count",
+          "type": "count",
+          "typeOptions": {
+            "relationColumnId": "fldt413jePnMJk9p3",
+            "dependencies": {
+              "referencedColumnIdsForValue": [
+                "fldt413jePnMJk9p3"
+              ]
+            },
+            "resultType": "number"
+          }
+        }
+      ]
+    },
+    {
+      "id": "tblU7ErRcmJjWxP2L",
+      "isEmpty": false,
+      "name": "Items",
+      "nameForUrl": "items",
+      "primaryColumnName": "Item ID",
+      "columns": [
+        {
+          "id": "fldg9BydhBkl6Zs6n",
+          "name": "Item ID",
+          "type": "autoNumber",
+          "typeOptions": {
+            "maxUsedAutoNumber": 216
+          }
+        },
+        {
+          "id": "fldx66zqLBc4eMRIG",
+          "name": "Item object type",
+          "type": "select",
+          "typeOptions": {
+            "disableColors": false,
+            "choices": {
+              "selYRnPGY4qj8IoQE": {
+                "id": "selYRnPGY4qj8IoQE",
+                "name": "Miscellaneous Ephemera",
+                "color": "blue"
+              },
+              "selVIzN5mquHfbxag": {
+                "id": "selVIzN5mquHfbxag",
+                "name": "Political brochure",
+                "color": "cyan"
+              },
+              "selYYRmKIGcpSWwEa": {
+                "id": "selYYRmKIGcpSWwEa",
+                "name": "Urban Renewal Plan",
+                "color": "teal"
+              },
+              "selSoUr6wVvWoDrpN": {
+                "id": "selSoUr6wVvWoDrpN",
+                "name": "Newsletter",
+                "color": "green"
+              },
+              "selBWB3mm66tm4HNe": {
+                "id": "selBWB3mm66tm4HNe",
+                "name": "Newspaper Clippings",
+                "color": "yellow"
+              },
+              "selamwh4o8mESOeIv": {
+                "id": "selamwh4o8mESOeIv",
+                "name": "Photos",
+                "color": "orange"
+              },
+              "selueH1b0QtyizFz4": {
+                "id": "selueH1b0QtyizFz4",
+                "name": "Memos & Correspondence",
+                "color": "red"
+              },
+              "selARCHnVAc9EgzI7": {
+                "id": "selARCHnVAc9EgzI7",
+                "name": "Miscellaneous Publicity",
+                "color": "pink"
+              },
+              "sel1N4wuJUUTkNt6s": {
+                "id": "sel1N4wuJUUTkNt6s",
+                "name": "Publications",
+                "color": "purple"
+              },
+              "selzsQSieYVqIjcfv": {
+                "id": "selzsQSieYVqIjcfv",
+                "name": "Zoning Documents",
+                "color": "gray"
+              }
+            },
+            "choiceOrder": [
+              "selYRnPGY4qj8IoQE",
+              "selVIzN5mquHfbxag",
+              "selYYRmKIGcpSWwEa",
+              "selSoUr6wVvWoDrpN",
+              "selBWB3mm66tm4HNe",
+              "selamwh4o8mESOeIv",
+              "selueH1b0QtyizFz4",
+              "selARCHnVAc9EgzI7",
+              "sel1N4wuJUUTkNt6s",
+              "selzsQSieYVqIjcfv"
+            ]
+          }
+        },
+        {
+          "id": "fldkISiju2piRf6jv",
+          "name": "Donated to Lakeland Digital Archive",
+          "type": "checkbox",
+          "typeOptions": {
+            "color": "green",
+            "icon": "check"
+          }
+        },
+        {
+          "id": "fldwtRuacCjpnyffx",
+          "name": "Subjects",
+          "type": "foreignKey",
+          "typeOptions": {
+            "relationship": "many",
+            "foreignTableId": "tblCNMGytsja3FiDm",
+            "symmetricColumnId": "fldVuAQfGweMTuQRa"
+          }
+        },
+        {
+          "id": "fldwASX26cZ1evTLW",
+          "name": "Item #",
+          "type": "text",
+          "typeOptions": null
+        },
+        {
+          "id": "fldru9EPyQnOsgnaV",
+          "name": "Title",
+          "type": "text",
+          "typeOptions": null
+        },
+        {
+          "id": "fld0wVW8MwCRARML9",
+          "name": "# images",
+          "type": "count",
+          "typeOptions": {
+            "relationColumnId": "fldoKdennrtrG2KrD",
+            "dependencies": {
+              "referencedColumnIdsForValue": [
+                "fldoKdennrtrG2KrD"
+              ]
+            },
+            "resultType": "number"
+          }
+        },
+        {
+          "id": "fldh04ZpzpHgLXH8u",
+          "name": "Folder",
+          "type": "foreignKey",
+          "typeOptions": {
+            "relationship": "many",
+            "foreignTableId": "tblE8FaVk1fJcan9W",
+            "symmetricColumnId": "fldqZDo9kPSkmKUZH"
+          }
+        },
+        {
+          "id": "fldoKdennrtrG2KrD",
+          "name": "Images in Item",
+          "type": "foreignKey",
+          "typeOptions": {
+            "foreignTableId": "tblqGhmEFYXUPcR15",
+            "symmetricColumnId": "fldI5e84419uwRZgT",
+            "relationship": "many"
+          }
+        },
+        {
+          "id": "fldAb9ISsBOfY4IYx",
+          "name": "People",
+          "type": "foreignKey",
+          "typeOptions": {
+            "relationship": "many",
+            "foreignTableId": "tbltNKcyVSdGTrzBQ",
+            "symmetricColumnId": "fldaL4Wv5Z8WYRXmK"
+          }
+        },
+        {
+          "id": "fldp2ThhMJTbrPOJG",
+          "name": "Places/Organizations",
+          "type": "foreignKey",
+          "typeOptions": {
+            "relationship": "many",
+            "foreignTableId": "tblDzyv8cvWP0kkXS",
+            "symmetricColumnId": "fldjwgITUxOl0r5yH"
+          }
+        },
+        {
+          "id": "fldBNMP1DsohAEnay",
+          "name": "Readable Item ID",
+          "type": "formula",
+          "typeOptions": {
+            "formulaTextParsed": "column_value_fldh04ZpzpHgLXH8u & \"-\" & {column_value_fldwASX26cZ1evTLW}",
+            "dependencies": {
+              "referencedColumnIdsForValue": [
+                "fldh04ZpzpHgLXH8u",
+                "fldwASX26cZ1evTLW"
+              ]
+            },
+            "resultType": "text"
+          }
+        },
+        {
+          "id": "fldJGsAx9VjtrXcxU",
+          "name": "Fiona MSS Project",
+          "type": "select",
+          "typeOptions": {
+            "choiceOrder": [
+              "selyM190NG81D8eEz",
+              "selIIZyR7gWWvAM60",
+              "selkhYwpSOoMq7Hyw"
+            ],
+            "choices": {
+              "selyM190NG81D8eEz": {
+                "id": "selyM190NG81D8eEz",
+                "color": "blueMedium",
+                "name": "Site 1"
+              },
+              "selIIZyR7gWWvAM60": {
+                "id": "selIIZyR7gWWvAM60",
+                "color": "cyanMedium",
+                "name": "Site 2"
+              },
+              "selkhYwpSOoMq7Hyw": {
+                "id": "selkhYwpSOoMq7Hyw",
+                "color": "tealMedium",
+                "name": "Site 3"
+              }
+            },
+            "disableColors": false
+          }
+        },
+        {
+          "id": "fldU5f6BV1KDkqsO0",
+          "name": "Count (Images in Item)",
+          "type": "count",
+          "typeOptions": {
+            "relationColumnId": "fldoKdennrtrG2KrD",
+            "dependencies": {
+              "referencedColumnIdsForValue": [
+                "fldoKdennrtrG2KrD"
+              ]
+            },
+            "resultType": "number"
+          }
+        }
+      ]
+    },
+    {
+      "id": "tblqGhmEFYXUPcR15",
+      "isEmpty": false,
+      "name": "Images",
+      "nameForUrl": "images",
+      "primaryColumnName": "Image ID",
+      "columns": [
+        {
+          "id": "fldVw6q0wcxkORxar",
+          "name": "Image ID",
+          "type": "formula",
+          "typeOptions": {
+            "formulaTextParsed": "column_value_fldtKLsQuD2aWu8mm & \"-\" & {column_value_fldBVppo4j1q3c9ub}",
+            "dependencies": {
+              "referencedColumnIdsForValue": [
+                "fldtKLsQuD2aWu8mm",
+                "fldBVppo4j1q3c9ub"
+              ]
+            },
+            "resultType": "text"
+          }
+        },
+        {
+          "id": "fldxvloxRcV1SzO5p",
+          "name": "Image Description",
+          "type": "multilineText",
+          "typeOptions": null
+        },
+        {
+          "id": "fldtKLsQuD2aWu8mm",
+          "name": "Folder",
+          "type": "foreignKey",
+          "typeOptions": {
+            "relationship": "many",
+            "foreignTableId": "tblE8FaVk1fJcan9W",
+            "symmetricColumnId": "fldt413jePnMJk9p3"
+          }
+        },
+        {
+          "id": "fldaUwYN4YrNKDmQm",
+          "name": "Filename",
+          "type": "text",
+          "typeOptions": null
+        },
+        {
+          "id": "fldBVppo4j1q3c9ub",
+          "name": "Image #",
+          "type": "text",
+          "typeOptions": null
+        },
+        {
+          "id": "fldI5e84419uwRZgT",
+          "name": "Part of Item",
+          "type": "foreignKey",
+          "typeOptions": {
+            "relationship": "many",
+            "foreignTableId": "tblU7ErRcmJjWxP2L",
+            "symmetricColumnId": "fldoKdennrtrG2KrD"
+          }
+        },
+        {
+          "id": "fld8x6KVUx0KUlWf5",
+          "name": "People (Item Level)",
+          "type": "lookup",
+          "typeOptions": {
+            "relationColumnId": "fldI5e84419uwRZgT",
+            "foreignTableRollupColumnId": "fldAb9ISsBOfY4IYx",
+            "dependencies": {
+              "referencedColumnIdsForValue": [
+                "fldI5e84419uwRZgT",
+                "fldAb9ISsBOfY4IYx"
+              ]
+            },
+            "resultType": "foreignKey"
+          }
+        },
+        {
+          "id": "fldb921UWZJRC1OW8",
+          "name": "Places (Item Level)",
+          "type": "lookup",
+          "typeOptions": {
+            "relationColumnId": "fldI5e84419uwRZgT",
+            "foreignTableRollupColumnId": "fldp2ThhMJTbrPOJG",
+            "dependencies": {
+              "referencedColumnIdsForValue": [
+                "fldI5e84419uwRZgT",
+                "fldp2ThhMJTbrPOJG"
+              ]
+            },
+            "resultType": "foreignKey"
+          }
+        },
+        {
+          "id": "fld1sbZdhvZujZRrw",
+          "name": "Subject(s) (Item Level)",
+          "type": "lookup",
+          "typeOptions": {
+            "relationColumnId": "fldI5e84419uwRZgT",
+            "foreignTableRollupColumnId": "fldwtRuacCjpnyffx",
+            "dependencies": {
+              "referencedColumnIdsForValue": [
+                "fldI5e84419uwRZgT",
+                "fldwtRuacCjpnyffx"
+              ]
+            },
+            "resultType": "foreignKey"
+          }
+        },
+        {
+          "id": "fldqa2zRtbbb84AfM",
+          "name": "Item Description",
+          "type": "lookup",
+          "typeOptions": {
+            "relationColumnId": "fldI5e84419uwRZgT",
+            "foreignTableRollupColumnId": "fldru9EPyQnOsgnaV",
+            "dependencies": {
+              "referencedColumnIdsForValue": [
+                "fldI5e84419uwRZgT",
+                "fldru9EPyQnOsgnaV"
+              ]
+            },
+            "resultType": "text"
+          }
+        },
+        {
+          "id": "fld9AQo0F0QGmOsa4",
+          "name": "People (Image Level)",
+          "type": "foreignKey",
+          "typeOptions": {
+            "relationship": "many",
+            "foreignTableId": "tbltNKcyVSdGTrzBQ",
+            "symmetricColumnId": "fldjsRLfuIkUVZ2Bg"
+          }
+        },
+        {
+          "id": "fldd36O1RusE8OZUc",
+          "name": "Places (Image Level)",
+          "type": "foreignKey",
+          "typeOptions": {
+            "relationship": "many",
+            "foreignTableId": "tblDzyv8cvWP0kkXS",
+            "symmetricColumnId": "fldH4sy2NMiRK4Ru5"
+          }
+        },
+        {
+          "id": "fldpojfyTK72GiQdF",
+          "name": "Subjects (Image Level)",
+          "type": "foreignKey",
+          "typeOptions": {
+            "relationship": "many",
+            "foreignTableId": "tblCNMGytsja3FiDm",
+            "symmetricColumnId": "fldC8P27DhFh908Hr"
+          }
+        },
+        {
+          "id": "fldFjtYhGuTqh5vMP",
+          "name": "Last Class",
+          "type": "lookup",
+          "typeOptions": {
+            "relationColumnId": "fldtKLsQuD2aWu8mm",
+            "foreignTableRollupColumnId": "fldrGik2NMTkBhiO7",
+            "dependencies": {
+              "referencedColumnIdsForValue": [
+                "fldtKLsQuD2aWu8mm",
+                "fldrGik2NMTkBhiO7"
+              ]
+            },
+            "resultType": "checkbox",
+            "color": "green",
+            "icon": "check"
+          }
+        },
+        {
+          "id": "fldiLqtLzlreX5hH1",
+          "name": "Book Selection",
+          "type": "checkbox",
+          "typeOptions": {
+            "color": "green",
+            "icon": "check"
+          }
+        }
+      ]
+    },
+    {
+      "id": "tbltNKcyVSdGTrzBQ",
+      "isEmpty": false,
+      "name": "People",
+      "nameForUrl": "people",
+      "primaryColumnName": "Name",
+      "columns": [
+        {
+          "id": "fldccdnMAm3skIPDv",
+          "name": "Name",
+          "type": "text",
+          "typeOptions": null
+        },
+        {
+          "id": "fld2WAo2NerIHOK9y",
+          "name": "Donor of",
+          "type": "foreignKey",
+          "typeOptions": {
+            "foreignTableId": "tblE8FaVk1fJcan9W",
+            "symmetricColumnId": "fldl8enjbwiugWcoJ",
+            "relationship": "many"
+          }
+        },
+        {
+          "id": "fldaL4Wv5Z8WYRXmK",
+          "name": "Identified in these Items",
+          "type": "foreignKey",
+          "typeOptions": {
+            "foreignTableId": "tblU7ErRcmJjWxP2L",
+            "symmetricColumnId": "fldAb9ISsBOfY4IYx",
+            "relationship": "many"
+          }
+        },
+        {
+          "id": "fldjsRLfuIkUVZ2Bg",
+          "name": "Identified in these Images",
+          "type": "foreignKey",
+          "typeOptions": {
+            "foreignTableId": "tblqGhmEFYXUPcR15",
+            "symmetricColumnId": "fld9AQo0F0QGmOsa4",
+            "relationship": "many"
+          }
+        }
+      ]
+    },
+    {
+      "id": "tblCNMGytsja3FiDm",
+      "isEmpty": false,
+      "name": "Subjects",
+      "nameForUrl": "subjects",
+      "primaryColumnName": "Name",
+      "columns": [
+        {
+          "id": "fldtPrZaIvuO9PslK",
+          "name": "Name",
+          "type": "text",
+          "typeOptions": null
+        },
+        {
+          "id": "fldVuAQfGweMTuQRa",
+          "name": "Applied to Item",
+          "type": "foreignKey",
+          "typeOptions": {
+            "foreignTableId": "tblU7ErRcmJjWxP2L",
+            "symmetricColumnId": "fldwtRuacCjpnyffx",
+            "relationship": "many"
+          }
+        },
+        {
+          "id": "fldC8P27DhFh908Hr",
+          "name": "Applied to Images",
+          "type": "foreignKey",
+          "typeOptions": {
+            "foreignTableId": "tblqGhmEFYXUPcR15",
+            "symmetricColumnId": "fldpojfyTK72GiQdF",
+            "relationship": "many"
+          }
+        }
+      ]
+    },
+    {
+      "id": "tblDzyv8cvWP0kkXS",
+      "isEmpty": false,
+      "name": "Locations",
+      "nameForUrl": "locations",
+      "primaryColumnName": "Name",
+      "columns": [
+        {
+          "id": "fldhBJODBiYTKeLvz",
+          "name": "Name",
+          "type": "text",
+          "typeOptions": null
+        },
+        {
+          "id": "fldjwgITUxOl0r5yH",
+          "name": "Identified in these Items",
+          "type": "foreignKey",
+          "typeOptions": {
+            "foreignTableId": "tblU7ErRcmJjWxP2L",
+            "symmetricColumnId": "fldp2ThhMJTbrPOJG",
+            "relationship": "many"
+          }
+        },
+        {
+          "id": "fldH4sy2NMiRK4Ru5",
+          "name": "Identified in these Images",
+          "type": "foreignKey",
+          "typeOptions": {
+            "foreignTableId": "tblqGhmEFYXUPcR15",
+            "symmetricColumnId": "fldd36O1RusE8OZUc",
+            "relationship": "many"
+          }
+        }
+      ]
+    },
+    {
+      "id": "tbl62sGsBYIb2gv1P",
+      "isEmpty": false,
+      "name": "QA",
+      "nameForUrl": "qa",
+      "primaryColumnName": "Name",
+      "columns": [
+        {
+          "id": "fldJxE8T0CXmsV2RL",
+          "name": "Name",
+          "type": "formula",
+          "typeOptions": {
+            "formulaTextParsed": "\"QA Check:\"&column_value_fldzOXpBx1biUHAMr",
+            "dependencies": {
+              "referencedColumnIdsForValue": [
+                "fldzOXpBx1biUHAMr"
+              ]
+            },
+            "resultType": "text"
+          }
+        },
+        {
+          "id": "fldPY7rFuAyVQKu53",
+          "name": "Notes",
+          "type": "multilineText",
+          "typeOptions": null
+        },
+        {
+          "id": "fldFotfMiSjUPtJ2F",
+          "name": "Autonumber",
+          "type": "autoNumber",
+          "typeOptions": {
+            "maxUsedAutoNumber": 67
+          }
+        },
+        {
+          "id": "fldBDacrFFVycSpLC",
+          "name": "Post Processing Technician",
+          "type": "text",
+          "typeOptions": null
+        },
+        {
+          "id": "fldzOXpBx1biUHAMr",
+          "name": "Folder",
+          "type": "foreignKey",
+          "typeOptions": {
+            "relationship": "many",
+            "foreignTableId": "tblE8FaVk1fJcan9W",
+            "symmetricColumnId": "fld8JwVpXyIeOa0cT"
+          }
+        },
+        {
+          "id": "fldvLO9aMRRRpUg6H",
+          "name": "Post Processed?",
+          "type": "checkbox",
+          "typeOptions": {
+            "color": "green",
+            "icon": "check"
+          }
+        },
+        {
+          "id": "fldfAJkbVavJJPlBl",
+          "name": "Donor Name",
+          "type": "lookup",
+          "typeOptions": {
+            "relationColumnId": "fldzOXpBx1biUHAMr",
+            "foreignTableRollupColumnId": "fldl8enjbwiugWcoJ",
+            "dependencies": {
+              "referencedColumnIdsForValue": [
+                "fldzOXpBx1biUHAMr",
+                "fldl8enjbwiugWcoJ"
+              ]
+            },
+            "resultType": "foreignKey"
+          }
+        },
+        {
+          "id": "fldpL31XbENqN5Y9q",
+          "name": "Item Records Created?",
+          "type": "select",
+          "typeOptions": {
+            "choiceOrder": [
+              "seleNcfUVV3IvTvqT",
+              "seldHF6Fo6WcDCZtc"
+            ],
+            "choices": {
+              "seleNcfUVV3IvTvqT": {
+                "id": "seleNcfUVV3IvTvqT",
+                "color": "yellowMedium",
+                "name": "In Progress"
+              },
+              "seldHF6Fo6WcDCZtc": {
+                "id": "seldHF6Fo6WcDCZtc",
+                "color": "greenDark",
+                "name": "Completed"
+              }
+            },
+            "disableColors": false
+          }
+        },
+        {
+          "id": "fldVgoREaeHqpd1G2",
+          "name": "Image Records Created?",
+          "type": "select",
+          "typeOptions": {
+            "choiceOrder": [
+              "selJ26NhXUEQnUBO6",
+              "sel6cvsFxFABxyZJA"
+            ],
+            "choices": {
+              "selJ26NhXUEQnUBO6": {
+                "id": "selJ26NhXUEQnUBO6",
+                "color": "yellowMedium",
+                "name": "In Process"
+              },
+              "sel6cvsFxFABxyZJA": {
+                "id": "sel6cvsFxFABxyZJA",
+                "color": "greenDark",
+                "name": "Completed"
+              }
+            },
+            "disableColors": false
+          }
+        },
+        {
+          "id": "fldf2ZmmSLNz4xM1o",
+          "name": "Donation Date",
+          "type": "lookup",
+          "typeOptions": {
+            "relationColumnId": "fldzOXpBx1biUHAMr",
+            "foreignTableRollupColumnId": "fldaMxGrhnzZxLV1a",
+            "dependencies": {
+              "referencedColumnIdsForValue": [
+                "fldzOXpBx1biUHAMr",
+                "fldaMxGrhnzZxLV1a"
+              ]
+            },
+            "resultType": "date"
+          }
+        },
+        {
+          "id": "fldk1sTZb1i1GQ1Pn",
+          "name": "Descriptive Metadata?",
+          "type": "select",
+          "typeOptions": {
+            "choiceOrder": [
+              "selt8nhBaIEE1e9Q0",
+              "selgbZpWd9NPJpTqf",
+              "selIHiieM3VkN83vS",
+              "selCvMWD8qpB2NXYi"
+            ],
+            "choices": {
+              "selt8nhBaIEE1e9Q0": {
+                "id": "selt8nhBaIEE1e9Q0",
+                "color": "redDarker",
+                "name": "No Data"
+              },
+              "selgbZpWd9NPJpTqf": {
+                "id": "selgbZpWd9NPJpTqf",
+                "color": "redMedium",
+                "name": "Folder Level Only"
+              },
+              "selIHiieM3VkN83vS": {
+                "id": "selIHiieM3VkN83vS",
+                "color": "yellowMedium",
+                "name": "Folder and Item Level"
+              },
+              "selCvMWD8qpB2NXYi": {
+                "id": "selCvMWD8qpB2NXYi",
+                "color": "greenDarker",
+                "name": "Folder, Item, & Image Level"
+              }
+            },
+            "disableColors": false
+          }
+        },
+        {
+          "id": "fldiNSLGVjp7EynZU",
+          "name": "Last Class?",
+          "type": "lookup",
+          "typeOptions": {
+            "relationColumnId": "fldzOXpBx1biUHAMr",
+            "foreignTableRollupColumnId": "fldrGik2NMTkBhiO7",
+            "dependencies": {
+              "referencedColumnIdsForValue": [
+                "fldzOXpBx1biUHAMr",
+                "fldrGik2NMTkBhiO7"
+              ]
+            },
+            "resultType": "checkbox",
+            "color": "green",
+            "icon": "check"
+          }
+        },
+        {
+          "id": "fldB0DOx5xKRm2d5t",
+          "name": "Tags doublechecked?",
+          "type": "checkbox",
+          "typeOptions": {
+            "color": "green",
+            "icon": "thumbsUp"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -249,7 +249,7 @@ The Lakeland Digital Archive (LDA) and Lakeland Digitization Tracking (LDT) data
 * LDT is linked to the file system via a naming convention involving the folder, item and image name. LDA is explicitly linked to a URL (S3 bucket), but there are some links to the ASA interviews, and the old Omeka site.
 * LDA models some processing information in the Digital Objects and Resource Locations tables. LDT has a separate QA table that is linked to the Folders table.
 
-<img src="schema-before.png">
+<img src="docs/schema-before.png">
 
 ## Proposed Merge
 
@@ -260,7 +260,7 @@ But as the previous section describes the two databases actually make similar se
 1. It will be easier to express and maintain the relationships between to the files and the metadata if there is one rather multiple ways of doing it.
 2. It will be easier to build applications that use the data if they don't have to look for data in multiple ways, but can expect a single database schema for the archival objects.
 
-<img src="schema-after.png">
+<img src="docs/schema-after.png">
 
 Notes about the schema:
 
