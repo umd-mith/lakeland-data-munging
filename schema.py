@@ -1,4 +1,5 @@
 import json
+import time
 import pathlib
 
 from airtable import Airtable
@@ -19,10 +20,11 @@ class Base:
         self.tables = {}
         self.api_key = api_key
         self.schema = schema
+        self.load()
 
-        for table_name, relations in schema.items():
+    def load(self):
+        for table_name, relations in self.schema.items():
             self.tables[table_name] = Table(self, table_name, relations)
-
         for table in self.tables.values():
             table.link()
         
@@ -30,8 +32,13 @@ class Base:
         """
         Empty all the tables but leave the schema intact.
         """
+        # safety to only ever wipe this airtable base
+        assert self.id == 'appqn0kIOXRo00kdN'
+
         for table in self.tables.values():
             table.wipe()
+
+        self.load()
 
 
 class Table:
@@ -56,6 +63,7 @@ class Table:
         result = self.airtable.insert(row)
         self.data.append(result)
         self.link()
+        time.sleep(.5)
         return result
 
     def get(self, id):

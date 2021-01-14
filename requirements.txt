@@ -1,0 +1,2 @@
+python-dotenv
+airtable-python-wrapper
