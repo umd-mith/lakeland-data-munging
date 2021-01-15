@@ -1,5 +1,4 @@
 import json
-import time
 import pathlib
 
 from airtable import Airtable
@@ -63,7 +62,6 @@ class Table:
         result = self.airtable.insert(row)
         self.data.append(result)
         self.link()
-        time.sleep(.5)
         return result
 
     def get(self, id):
@@ -118,6 +116,6 @@ class Table:
         """
         Remove all rows from the table, and remove any cached data.
         """
-        for row in self.data:
-            self.airtable.delete(row['id'])
+        ids = [row['id'] for row in self.data]
+        self.airtable.batch_delete(ids)
         self.cache_file.unlink()
