@@ -1,5 +1,35 @@
 # This was adapted from umd-mith/lchp-digitization to find images
-# associated with folders and convert them to PNG derivatives
+# associated with folders. It attempts to get the original file for
+# a given image id, and then any corrected files that there might be.
+# This is complicated by the fact that the subdirectories are not uniform and
+# neither are the file extensions.
+#
+# This is a list of the subdirectories used for each folder (after
+# capitalization):
+#
+#     24 JPEGS
+#      9 CORRECTED TIFF FILES
+#      7 TIFF FILES
+#      7 JPEG FILES
+#      7 CORRECTED TIFFS
+#      1 UNPROCESSED ORIGINALS
+#      1 TIFF IMAGES
+#      1 RESCANS OF REUNION PHOTOS NOV 21 2019
+#      1 RESCANS NOV 21 2019
+#      1 PHOTOS FROM CAMERA
+#      1 ORIGINAL UNPROCESSED SCANS
+#      1 ORIGINAL UNCORRECTED TIFFS
+#      1 ORIGINAL UNCORRECTED PHOTOS
+#      1 NRW FILES
+#      1 JPEG IMAGES
+#      1 GREATER MT NEBO AME CHURCH
+#      1 CROPPED
+#      1 CORRECTED
+#      1 BAGIT INFO
+#      1 BAD SCANS-REDO
+#      1 84B1A1 JPEGS
+#
+# In addition the following folders 
 
 import os
 import re
@@ -10,12 +40,41 @@ import logging
 from os import stat
 from PIL import Image
 from os import listdir as ls
-from os.path import join, isdir, isfile, abspath
+from os.path import join, isdir, isfile, abspath, dirname
 
 IMAGE_ROOT = abspath('mith-lastclass-raw')
 
-def get_images(folder):
-    images_dir = find_images_dir(folder)
+def get_orig(image_id):
+    folder_id, seq_id = image_id.split('-')
+
+    # attempt to find the best directory for the images
+    images_dir = find_images_dir(folder_id)
+
+    # look to see if the image id matches
+    found = None
+    for i in get_images(images_dir):
+        if i['id'] == image_id:
+            found = i
+
+    # if no image was found look in the parent directory
+    if not found:
+        for i in get_images(dirname(images_dir)):
+            if i['id'] == image_id:
+                found = i
+
+    # finally just look for the jpg or tiff anywhere in the directory
+    if not found:
+        for dirpath, dirnames, filenames in os.walk(dirname(images_dir)):
+            for f in filenames:
+                if image_id in f:
+                    found = {
+                        "id": image_id,
+                        "path": join(dirpath, f)
+                    }
+
+    return found
+
+def get_images(images_dir):
 
     for name in ls(images_dir):
         image_path = join(images_dir, name)
@@ -30,11 +89,11 @@ def get_images(folder):
         if re.match('^[a-z0-9]{6}[-_]?\d{2,3}(\.(tiff?)|\.(jpe?g))?$', name, re.IGNORECASE):
             image_id = get_image_id(images_dir, name)
             if not image_id:
-                print('unable to determine image_id for {}'.format(mage_path))
+                print('unable to determine image_id for {}'.format(image_path))
             else:
                 yield({"path": image_path, "id": image_id})
         else:
-            print('does not look like an image: {}'.format(name))
+            pass # print('does not look like an image: {}'.format(name))
 
 
 def find_images_dir(folder):
@@ -123,3 +182,6 @@ def make_image(orig_image_path, image_id):
     img.thumbnail((1200, 1200))
     img.save(image_path)
     logging.info('saved %s', image_path)
+
+if __name__ == "__main__":
+    print(get_orig('88568e-017'))
