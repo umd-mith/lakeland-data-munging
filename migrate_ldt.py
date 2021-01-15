@@ -250,7 +250,7 @@ for item in ldt.tables['Items'].data:
     title = item['fields'].get('Title')
     item_type = item['fields'].get('Object Type')
 
-    subjects = ()
+    subjects = set()
     for s in item['fields'].get('Subjects', []):
         subject = lak.tables['Subjects'].get_or_insert({
             "Name": s['fields']["Name"]
