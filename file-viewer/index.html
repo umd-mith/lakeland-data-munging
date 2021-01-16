@@ -4,9 +4,27 @@
   <title>JSON VIEW</title>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="jsonview.bundle.css">
+  <style>
+    body {
+      font-size: 18pt;
+    }
+    .json-container {
+      font-size: 18pt;
+    }
+    #files {
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 800px;
+    }
+    h1 {
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-  <div class="root"></div>
+  <h1>Lakeland Files</h1>
+  <div id="files">
+  </div>
 
   <script type="text/javascript" src="jsonview.bundle.js"></script>
   <script type="text/javascript">
@@ -16,8 +34,8 @@
     })
     .then((data) => {
       const tree = JsonView.createTree(data);
-      JsonView.render(tree, document.querySelector('.root'));
-      JsonView.expandChildren(tree);
+      JsonView.render(tree, document.querySelector('#files'));
+      JsonView.expandChildren(tree)
     })
     .catch((err) => {
       console.log(err);
