@@ -259,9 +259,11 @@ for item in ldt.tables['Items'].data:
         else:
             print('unable to find file for {}'.format(image['fields']['Image ID']))
 
-    # sort the files by their image_id (includes their sequence number)
-    # the order of files is their sequence in the item
+    # get the File Airtable IDs sorted in order of their original Image ID
+    # this insures that their order is sequential per the original ordering
+
     files = sorted(files, key=lambda f: f["image_id"])
+    files = [f['file_id'] for f in files]
 
     if files:
         lak.tables['Items'].insert({
