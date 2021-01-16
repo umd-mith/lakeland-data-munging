@@ -85,10 +85,19 @@ class Table:
                 return results[0]
         return results
 
-    def get_or_insert(self, fields):
+    def get_or_insert(self, fields, extra=None):
+        """
+        Get or insert and get the first record that matches the fields.
+        When inserting you can add additional things using the extras value
+        which should be a dictionary of names and values to set in addition
+        to the supplied fields.
+        """
         r = self.find(fields, first=True)
         if not r:
-            r = self.insert(fields)
+            f = fields
+            if extra:
+                f.update(extra)
+            r = self.insert(f)
         return r
 
     def link(self):
