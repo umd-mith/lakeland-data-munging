@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 
 import os
-import re
 import magic
 import pathlib
-import hashlib
 
-from schema import Base
 from dotenv import load_dotenv
 from ldt_images import get_orig
+from schema import Base, parse_name, get_sha256, get_ext
 
 load_dotenv()
 airtable_key = os.environ.get('AIRTABLE_KEY')
@@ -53,41 +51,6 @@ lak = Base('appqn0kIOXRo00kdN', airtable_key, {
     "Subjects": {},
     "Organizations": {}
 })
-
-def parse_name(s):
-    """
-    Parse a name string into its parts.
-    """
-    parts = s.split(' ')
-    f = parts.pop(0)
-    l = parts.pop() if len(parts) > 0 else None
-    s = None
-    if l and re.match(r'^(sr)|jr|[iv]+$', l, re.IGNORECASE):
-        s = l
-        l = parts.pop()
-    m = ' '.join(parts) if len(parts) > 0 else None
-    return f, m, l, s
-
-def get_sha256(f):
-    d = hashlib.sha256()
-    fh = open(f, 'rb')
-    while True:
-        chunk = fh.read(512 * 1024)
-        if not chunk:
-            break
-        d.update(chunk)
-    return d.hexdigest()
-
-def get_ext(p, mimetype):
-    ext = p.suffix.strip('.')
-    if not ext:
-        if mimetype == 'image/jpeg':
-            ext = 'jpg'
-        elif mimetype == 'image/tiff':
-            ext = 'tiff'
-        else:
-            raise(Exception('Unknown extension for {}'.format(mimetype)))
-    return ext
 
 # First wipe the slate clean.
 
@@ -179,7 +142,7 @@ for f in ldt.tables['Folder'].data:
         else:
             print("couldn't find image for {}".format(image_id))
 
-    # sort them just in case
+    # sort them so they appear in sequence
     for image in sorted(files, key=lambda r: r['id']):
         image_path = pathlib.Path(image['path'])
         mimetype = magic.from_file(image_path.as_posix(), mime=True)
@@ -298,7 +261,7 @@ for item in ldt.tables['Items'].data:
 
     # sort the files by their image_id (includes their sequence number)
     # the order of files is their sequence in the item
-    files = sorted(files, lambda f: f["image_id"])
+    files = sorted(files, key=lambda f: f["image_id"])
 
     if files:
         lak.tables['Items'].insert({

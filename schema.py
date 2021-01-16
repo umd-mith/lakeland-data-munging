@@ -1,12 +1,8 @@
-import json
-import pathlib
+import re
+import magic
+import hashlib
 
 from airtable import Airtable
-
-
-# location of the project and data files
-ROOT_DIR = pathlib.Path(__file__).parent
-DATA_DIR = ROOT_DIR / "data"
 
 
 class Base:
@@ -119,3 +115,39 @@ class Table:
         self.load()
         ids = [row['id'] for row in self.data]
         self.airtable.batch_delete(ids)
+
+
+def parse_name(s):
+    """
+    Parse a name string into its parts.
+    """
+    parts = s.split(' ')
+    f = parts.pop(0)
+    l = parts.pop() if len(parts) > 0 else None
+    s = None
+    if l and re.match(r'^(sr)|jr|[iv]+$', l, re.IGNORECASE):
+        s = l
+        l = parts.pop()
+    m = ' '.join(parts) if len(parts) > 0 else None
+    return f, m, l, s
+
+def get_sha256(f):
+    d = hashlib.sha256()
+    fh = open(f, 'rb')
+    while True:
+        chunk = fh.read(512 * 1024)
+        if not chunk:
+            break
+        d.update(chunk)
+    return d.hexdigest()
+
+def get_ext(p, mimetype):
+    ext = p.suffix.strip('.')
+    if not ext:
+        if mimetype == 'image/jpeg':
+            ext = 'jpg'
+        elif mimetype == 'image/tiff':
+            ext = 'tiff'
+        else:
+            raise(Exception('Unknown extension for {}'.format(mimetype)))
+    return ext
