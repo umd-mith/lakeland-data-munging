@@ -289,11 +289,16 @@ for item in ldt.tables['Items'].data:
 
     files = []
     for image in item['fields'].get('Images in Item', []):
-        file_id = image_file_map.get(image['fields']['Image ID'])
+        image_id = image['fields'].get('Image ID')
+        file_id = image_file_map.get(image_id)
         if file_id:
-            files.append(file_id)
+            files.append({"image_id": image_id, "file_id": file_id})
         else:
             print('unable to find file for {}'.format(image['fields']['Image ID']))
+
+    # sort the files by their image_id (includes their sequence number)
+    # the order of files is their sequence in the item
+    files = sorted(files, lambda f: f["image_id"])
 
     if files:
         lak.tables['Items'].insert({
