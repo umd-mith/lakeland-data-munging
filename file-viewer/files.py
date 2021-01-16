@@ -3,7 +3,10 @@
 import io
 import os
 import csv
+import sys
 import json
+
+sys.path.append((os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from schema import Base
 from dotenv import load_dotenv
