@@ -302,5 +302,6 @@ for item in ldt.tables['Items'].data:
             "Subjects": list(subjects),
             "People": list(people),
             "Places": list(places),
+            "Files": list(files),
             "Legacy Item ID": item['fields'].get('Readable Item ID')
         })
