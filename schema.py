@@ -34,6 +34,9 @@ class Base:
         # safety to only ever wipe this airtable base
         assert self.id == 'appqn0kIOXRo00kdN'
 
+        # first get the latest data
+        self.load()
+
         for table in self.tables.values():
             table.wipe()
 
@@ -50,13 +53,10 @@ class Table:
         self.table_name = table_name
         self.relations = relations
         self.airtable = Airtable(base.id, table_name, base.api_key)
-        self.cache_file = DATA_DIR / (base.id + "-" + table_name + '.json')
+        self.load()
 
-        if self.cache_file.exists():
-            self.data = json.load(self.cache_file.open())
-        else:
-            self.data = self.airtable.get_all()
-            json.dump(self.data, self.cache_file.open('w'), indent=2)
+    def load(self):
+        self.data = self.airtable.get_all()
 
     def insert(self, row):
         result = self.airtable.insert(row)
@@ -114,8 +114,8 @@ class Table:
 
     def wipe(self):
         """
-        Remove all rows from the table, and remove any cached data.
+        Remove all rows from the table.
         """
+        self.load()
         ids = [row['id'] for row in self.data]
         self.airtable.batch_delete(ids)
-        self.cache_file.unlink()

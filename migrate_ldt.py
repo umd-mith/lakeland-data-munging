@@ -28,7 +28,7 @@ ldt = Base("appkzHtR3oryuaKfm", airtable_key, {
         "People": "People",
         "Places/Organizations": "Locations",
         "Subjects": "Subjects",
-        "Images in Items": "Images"
+        "Images in Item": "Images"
     },
     "Images": {
         "People (Image Level)": "People",
@@ -147,11 +147,20 @@ for f in ldt.tables['Folder'].data:
         })
         donors.append(d['id'])
 
+    # add any attachments
+    docs = []
+    for a in f['fields'].get('Inventory Form', []):
+        docs.append({'url': a['url']})
+    for a in f['fields'].get('Consent Form', []):
+        docs.append({'url': a['url']})
+
     # add each of the accessions
     accession = lak.tables['Accessions'].insert({
         "Donor": donors,
         "Date of Donation": f["fields"].get("Date of donation"),
         "Description": f["fields"].get("Accession Notes"),
+        "Documentation": docs, 
+        "Legacy Folder ID": f["fields"].get("Folder ID")
     })
 
     # make sure the folder is on disk
@@ -183,7 +192,8 @@ for f in ldt.tables['Folder'].data:
             "Format": mimetype,
             "Size": size,
             "Extension": ext,
-            "Original Filenames": image_path.as_posix()
+            "Original Filenames": image_path.as_posix(),
+            "Legacy Image ID": image['id']
         })
         image_file_map[image['id']] = img['id']
 
@@ -278,7 +288,7 @@ for item in ldt.tables['Items'].data:
         people.add(person['id'])
 
     files = []
-    for image in item['fields']['Images in Items']:
+    for image in item['fields'].get('Images in Item', []):
         file_id = image_file_map.get(image['fields']['Image ID'])
         if file_id:
             files.append(file_id)
@@ -291,5 +301,6 @@ for item in ldt.tables['Items'].data:
             "Type": item_type,
             "Subjects": list(subjects),
             "People": list(people),
-            "Places": list(places)
+            "Places": list(places),
+            "Legacy Item ID": item['fields'].get('Readable Item ID')
         })
