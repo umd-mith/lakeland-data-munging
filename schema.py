@@ -1,6 +1,10 @@
+import io
 import re
+import csv
 import magic
+import shutil
 import hashlib
+import pathlib
 
 from airtable import Airtable
 
@@ -59,6 +63,9 @@ class Table:
         self.data.append(result)
         self.link()
         return result
+
+    def update(self, id, row):
+        return self.airtable.update(id, row)
 
     def get(self, id):
         for row in self.data:
@@ -157,6 +164,27 @@ def get_ext(p, mimetype):
             ext = 'jpg'
         elif mimetype == 'image/tiff':
             ext = 'tiff'
+        elif mimetype == 'audio/mpeg':
+            ext = 'mp3'
+        elif mimetype == 'video/mpeg':
+            ext = 'mp4'
         else:
             raise(Exception('Unknown extension for {}'.format(mimetype)))
     return ext
+
+def csv_list(s):
+    "Parse a CSV row into a list"
+    return next(csv.reader(io.StringIO(s)))
+
+def csv_str(l):
+    "Turn a list into a CSV row"
+    out = io.StringIO()
+    csv.writer(out).writerow(l)
+    return out.getvalue().strip()
+
+def save_file(src, sha256, ext, delete=False):
+    filename = "{}.{}".format(sha256, ext)
+    dst = pathlib.Path('/mnt/data/') / filename
+    shutil.copyfile(src, dst)
+    if delete:
+        src.unlink()

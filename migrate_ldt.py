@@ -6,7 +6,7 @@ import pathlib
 
 from dotenv import load_dotenv
 from ldt_images import get_orig
-from schema import Base, parse_name, get_sha256, get_ext
+from schema import Base, parse_name, get_sha256, get_ext, save_file
 
 load_dotenv()
 airtable_key = os.environ.get('AIRTABLE_KEY')
@@ -149,6 +149,7 @@ for f in ldt.tables['Folder'].data:
         sha256 = get_sha256(image_path)
         size = image_path.stat().st_size
         ext = get_ext(image_path, mimetype)
+        save_file(image_path, sha256, ext)
         img = lak.tables['Files'].insert({
             "Accession": [accession['id']],
             "SHA256": sha256,
