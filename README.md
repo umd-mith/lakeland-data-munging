@@ -275,7 +275,7 @@ Notes about the schema:
 
 ## Migration
 
-The data migration is achieved by running two different programs `migrate_ldt.py` and `migrate_lda.py` in sequence. These programs share some logic in `schema.py` for interacting with Airtable and getting fixity and format information about files. These programs are simply meant to bootstrap our new database and not to be required to be run going forward.
+The data migration is achieved by running two different programs `migrate_ldt.py` and `migrate_lda.py` in sequence. These programs share some logic in `schema.py` for interacting with Airtable and getting fixity and format information about files. These programs are simply meant to bootstrap our new database and not to be required going forwards in the project.
 
 ### migrate_ldt
 
