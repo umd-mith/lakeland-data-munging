@@ -49,17 +49,20 @@ lak = Base('appqn0kIOXRo00kdN', airtable_key, {
     "People": {},
     "Places": {},
     "Subjects": {},
-    "Organizations": {}
+    "Organizations": {},
+    "Events": {},
+    "Families": {}
+
 })
 
 # First wipe the slate clean.
 
-print('Resetting base')
+print('migrate_ldt: resetting base')
 lak.wipe()
 
 # Populate authorities
 
-print('Adding People')
+print('migrate_ldt: adding People')
 for p in ldt.tables['People'].data:
     if 'Name' not in p['fields']:
         continue
@@ -71,7 +74,7 @@ for p in ldt.tables['People'].data:
         "Suffix Name": suffix
     })
 
-print('Adding Places')
+print('migrate_ldt: adding Places')
 for p in ldt.tables['Locations'].data:
     if 'Name' not in p['fields']:
         continue
@@ -79,7 +82,7 @@ for p in ldt.tables['Locations'].data:
         'Name': p['fields']['Name']
     })
 
-print('Adding Subjects')
+print('migrate_ldt: adding Subjects')
 for s in ldt.tables['Subjects'].data:
     if 'Name' not in s['fields']:
         continue
@@ -90,7 +93,7 @@ for s in ldt.tables['Subjects'].data:
 
 # Folders -> Accessions, Files
 
-print('Adding Accessions & Files')
+print('migrate_ldt: adding Accessions & Files')
 
 # image id -> file id mapping for use later
 image_file_map = {}
@@ -129,7 +132,7 @@ for f in ldt.tables['Folder'].data:
     # make sure the folder is on disk
     folder_id = f['fields']['Folder ID']
     if not (media / folder_id).is_dir():
-        print("missing folder for {}".format(folder_id))
+        print("migrate_ldt: missing folder for {}".format(folder_id))
         continue
 
     # get the original file for each linked image
@@ -140,7 +143,7 @@ for f in ldt.tables['Folder'].data:
         if orig:
             files.append(orig)
         else:
-            print("couldn't find image for {}".format(image_id))
+            print("migrate_ldt: couldn't find image for {}".format(image_id))
 
     # sort them so they appear in sequence
     for image in sorted(files, key=lambda r: r['id']):
@@ -163,7 +166,7 @@ for f in ldt.tables['Folder'].data:
 
 # Images -> Items
 
-print('Addding Images to Items')
+print('migrate_ldt: addding Images to Items')
 
 for image in ldt.tables['Images'].data:
 
@@ -217,7 +220,7 @@ for image in ldt.tables['Images'].data:
 
 # Items -> Items
 
-print('Adding Items')
+print('migrate_ldt: dding Items')
 
 for item in ldt.tables['Items'].data:
 
@@ -258,7 +261,7 @@ for item in ldt.tables['Items'].data:
         if file_id:
             files.append({"image_id": image_id, "file_id": file_id})
         else:
-            print('unable to find file for {}'.format(image['fields']['Image ID']))
+            print('migrate_ldt: unable to find file for {}'.format(image['fields']['Image ID']))
 
     # get the File Airtable IDs sorted in order of their original Image ID
     # this insures that their order is sequential per the original ordering

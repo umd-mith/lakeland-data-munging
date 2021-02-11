@@ -273,3 +273,46 @@ Notes about the schema:
 * Items and Collections can have multiple People, Places, Subjects.
 * Not all the columns are represented (just the tables). The expectation is that only the ones that we expect to need for the archive application will be brought forward.
 
+## Migration
+
+The data migration is achieved by running two different programs `migrate_ldt.py` and `migrate_lda.py` in sequence. These programs share some logic for interacting with Airtable and getting fixity and format information about files. These programs are simply meant to bootstrap our new database and not to be required to be run going forward.
+
+### migrate_ldt
+
+migrate_lda.py does not modify the existing LDT base and uses the following logic to read data from LDT and insert it into the new base LDA2.
+
+1. Clean out any existing records in LDA2
+2. Load existing People, Places, Subjects from LDT into LDA2
+3. Examine each row of LDT Folders:
+   1. Insert a row in the LDA2 Accessions table
+   2. For every value in the Linked Images column:
+       1. Locate the file on disk (s3://mith-lastclass-raw)
+       2. Calculate the SHA256 fixity 
+       3. Determine the file format
+       4. Copy the file to its new storage location /mnt/data
+       5. Insert a row into the LDA2 Files table that is linked to the Accession row
+4. Examine each row of LDT Images and insert a row into LDA2 Items if it has any descriptive metadata (Image Description, Subjects, Places or People) 
+5. Examine each row in LDT Items and insert a row into LDA2 Items
+
+### migrate_lda
+
+migrate_lda.py works similarly in that it reads data from LDA and adds it to LDA2. However it does not clean out data from LDA2 at the beginning because it is meant to augment data that has already been loaded into LDA2 by running migrate_lda.py.
+
+1. Loads LDA Subjects into the LDA2 Subjects and Events tables without duplicating entries
+2. Loads LDA Entities into the LDA2 People, Organizations, Familes and Places tables without duplicating entries
+3. Examine each row of the LDA Items table:
+   1. Examine each linked LDA Files row:
+     1. Use the File Path or Virtual Location to determine what Accession record to link the File to (Mary's Hard Drive, Maxine's Hard Drive, College Park Photos, ASA, or Omeka)
+     2. Locate the actual file using the first File Path, and looking for it in the MITH NAS at `projects/lakeland-digital-archive/object files/Files by Object Type`
+     3. If the File Path is not known retrieve the file using its Virtual Location (Omeka, ASA, Google Drive, GitHub, Amazon S3)
+     4. Calculate the SHA256 for the file
+     5. Determine the file format of the file
+     6. Copy the file to its new storage location /mnt/data
+     7. Insert a row into LDA2 Files that is linked to LDA2 Accessions
+  2. Collect the item's Creators, Interviewer, Interviewees, People, Subjects, Places and Organizations
+  3. Combine and normalize the LDA Object Type and Object Categories
+  4. Insert the Item and its relations into LDA2 Items
+
+### Migration Errors
+
+Any unexpected occurrences such as files that aren't able to be located, or 

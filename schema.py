@@ -168,12 +168,26 @@ def get_ext(p, mimetype):
             ext = 'mp3'
         elif mimetype == 'video/mpeg':
             ext = 'mp4'
+        elif mimetype == 'audio/x-wav':
+            ext = 'wav'
+        elif mimetype == 'video/mp4':
+            ext = 'mp4'
+        elif mimetype == 'application/pdf':
+            ext = 'pdf'
+        elif mimetype == 'video/x-ms-asf':
+            ext = 'asf'
+        elif mimetype == 'video/quicktime':
+            ext = 'mov'
+        elif mimetype == 'audio/x-m4a':
+            ext = 'm4a'
         else:
             raise(Exception('Unknown extension for {}'.format(mimetype)))
     return ext
 
 def csv_list(s):
     "Parse a CSV row into a list"
+    if "," in s and '"' not in s:
+        return [s]
     return next(csv.reader(io.StringIO(s)))
 
 def csv_str(l):

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import re
 import csv
 import magic
 import pathlib
@@ -15,7 +16,11 @@ from schema import Base, parse_name, get_sha256, get_ext, csv_str, csv_list, sav
 load_dotenv()
 airtable_key = os.environ.get('AIRTABLE_KEY')
 omeka_key = os.environ.get('OMEKA_KEY')
+google_key = os.environ.get('GOOGLE_KEY')
 asa_password = os.environ.get('ASA_PASSWORD')
+
+# nfs mount of mith NAS
+drive = pathlib.Path('/mnt/storage.mith.us-projects/lakeland-digital-archive/object files/Files by Object Type/')
 
 # Lakeland Digitization Archive 
 lda = Base("app9sKntqCyBwawhA", airtable_key, {
@@ -49,7 +54,7 @@ lak = Base('appqn0kIOXRo00kdN', airtable_key, {
     "Families": {}
 })
 
-print('Subjects')
+print('migrate_lda: adding Subjects')
 for s in lda.tables['Subjects'].data:
     s_type = s['fields'].get('Subject Category')
     if s_type == 'Concept':
@@ -57,13 +62,13 @@ for s in lda.tables['Subjects'].data:
     elif s_type == 'Event':
         table_name = 'Events'
     else:
-        print('Unknown subject type:', s)
+        print('migrate_lda: unknown subject type:', s)
         continue
     lak.tables[table_name].get_or_insert({
         "Name": s['fields']['Name']
     })
 
-print('Entities')
+print('migrate_lda: adding Entities')
 for e in lda.tables['Entities'].data:
     obj = {'Name': e['fields'].get('Name')}
     extra = None
@@ -87,7 +92,7 @@ for e in lda.tables['Entities'].data:
     elif e_type == 'Place':
         table_name = 'Places'
     else:
-        print('Unknown entity type:', e)
+        print('migrate_lda: unknown entity type:', e)
         continue
 
     lak.tables[table_name].get_or_insert(obj, extra)
@@ -130,6 +135,14 @@ def get_omeka_originals(url):
         results = [f['file_urls']['original'] for f in files]
     return results
 
+def get_google_drive(url):
+    m = re.match(r'.+drive.google.com/.*file/./(.+)/view.+', url)
+    if not m:
+        print('migrate_lda: unknown Google Drive URL', url)
+        return None
+    file_id = m.group(1)
+    return "https://www.googleapis.com/drive/v3/files/" + file_id + "?supportsAllDrives=true&alt=media&key=" + google_key
+
 def get_accessions(f):
     accessions = []
 
@@ -170,44 +183,52 @@ def get_accessions(f):
         )
 
     if len(accessions) == 0:
-        print('unknown accession for files', files)
+        print('migrate_lda: unknown accession for files', f)
 
     return [a['id'] for a in accessions]
 
-def get_download_urls(f):
+def get_paths(f):
+
     loc = f['fields'].get('Virtual Location')
-    legacy_id = f['fields'].get('Legacy ID-LCHP')
+    file_paths = f['fields'].get('File Path')
 
-    if not loc and not legacy_id:
-        print("Unknown file:", f)
-        return []
-    elif not loc and legacy_id:
-        # these are items from the lakeland digitization tracking base
-        # which can be ignored since we imported them with migrate_ldt.py
-        return []
+    paths = []
 
-    uri = urlparse(loc)
-    host = uri.netloc
-    download_urls = []
+    if file_paths:
+        # get the first original path and look for it in nfs mount
+        orig_paths = csv_list(file_paths)
+        path = drive / orig_paths[0]
+        if not path.is_file():
+            print("migrate_lda: file {} doesn't exist for {}".format(path, f))
+        else:
+            paths = [path]
 
-    if host == 'mith-lakeland-media.s3-website-us-east-1.amazonaws.com':
-        download_urls = [loc]
-    elif host == 'raw.githubusercontent.com':
-        download_urls = [loc]
-    elif host == 'lakeland.umd.edu' and uri.path.startswith('/asa/'):
-        download_urls = [get_asa(loc)]
-    elif host == 'lakeland.umd.edu':
-        download_urls = get_omeka_originals(loc)
+    elif loc:
+        uri = urlparse(loc)
+        host = uri.netloc
 
-    if len(download_urls) == 0:
-        print("Couldn't determine download URL for:", loc)
+        try:
+            if host == 'mith-lakeland-media.s3-website-us-east-1.amazonaws.com':
+                paths = [localize(loc)]
+            elif host == 'raw.githubusercontent.com':
+                paths = [localize(loc)]
+            elif host == 'lakeland.umd.edu' and uri.path.startswith('/asa/'):
+                paths = [localize(get_asa(loc))]
+            elif host == 'lakeland.umd.edu':
+                paths = list(map(localize, get_omeka_originals(loc)))
+            elif host == "drive.google.com":
+                paths = [localize(get_google_drive(loc))]
+        except requests.exceptions.HTTPError as e:
+            print("migrate_lda: encountered HTTP error when downloading loc: {}".format(e))
 
-    return download_urls
+    if len(paths) == 0:
+        print("migrate_lda: couldn't determine file(s) for:", f)
+
+    return paths
 
 def get_files(f):
     files = []
-    for url in get_download_urls(f):
-        path = localize(url)
+    for path in get_paths(f):
         accessions = get_accessions(f)
         mimetype = magic.from_file(path.as_posix(), mime=True)
         sha256 = get_sha256(path)
@@ -236,7 +257,9 @@ def get_files(f):
 
         # otherwise we need to insert a new row
         else:
-            save_file(path, sha256, ext, delete=True)
+            # only delete things that were downloaded to tmp
+            delete = True if str(path).startswith("tmp") else False
+            save_file(path, sha256, ext, delete=delete)
             afile = lak.tables['Files'].insert(obj)
 
         files.append(afile)
@@ -258,7 +281,18 @@ def get_entities(entities, lak_table):
         entity_ids.append(lak_obj['id'])
     return entity_ids
 
-print("Items & Files")
+def replace(s1, s2, l):
+    """Replace all occurrences of string s1 in list l with string s2
+    """
+    new_l = []
+    for s in l:
+        if s == s1:
+            new_l.append(s2)
+        else:
+            new_l.append(s)
+    return list(set(new_l))
+
+print("migrate_lda: adding Items & Files")
 for i in lda.tables['Items'].data:
 
     files = []
@@ -266,7 +300,7 @@ for i in lda.tables['Items'].data:
         files.extend(get_files(f))
 
     if not files:
-        print("no files for item", i)
+        print("migrate_lda: no files for item", i)
         continue
 
     creators = get_entities(i['fields'].get('Creator', []), 'People')
@@ -281,12 +315,23 @@ for i in lda.tables['Items'].data:
     orgs = filter(lambda p: p['fields']['Entity Category'] == 'Corporate Body', i['fields'].get('Places/Organizations', []))
     orgs = get_entities(orgs, 'Organizations')
 
+    # collect the Object Type and Object Category values
+    otypes = [
+        i['fields'].get('Object Type'),
+        i['fields'].get('Object Category')
+    ]
+    otypes = list(filter(lambda o: o is not None, otypes))
+
+    # normalize some of them
+    otypes = replace("Photos", "Photo", otypes)
+    otypes = replace("OralHistory", "Oral History", otypes)
+    otypes = replace("Publications", "Publication", otypes)
+
     lak.tables['Items'].insert({
         "Title": i['fields'].get('Title'),
         "Description": i['fields'].get('Description'),
         "Legacy UMD ID": i['fields'].get('Legacy ID-UMD'),
-        #"Object Type": i['fields']['Object Type'],
-        #"Object Category": i['fields']['Object Category'],
+        "Type": otypes,
         "Files": files,
         "Created": i['fields'].get('Creation Date'),
         "Creator": creators,
