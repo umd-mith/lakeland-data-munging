@@ -298,8 +298,8 @@ migrate_lda.py does not modify the existing LDT base and uses the following logi
 
 migrate_lda.py works similarly in that it reads data from LDA and adds it to LDA2. However it does not clean out data from LDA2 at the beginning because it is meant to augment data that has already been loaded into LDA2 by running migrate_lda.py.
 
-1. Loads LDA Subjects into the LDA2 Subjects and Events tables without duplicating entries
-2. Loads LDA Entities into the LDA2 People, Organizations, Familes and Places tables without duplicating entries
+1. Load LDA Subjects into the LDA2 Subjects and Events tables without duplicating entries
+2. Load LDA Entities into the LDA2 People, Organizations, Familes and Places tables without duplicating entries
 3. Examine each row of the LDA Items table:
    1. Examine each linked LDA Files row:
      1. Use the File Path or Virtual Location to determine what Accession record to link the File to (Mary's Hard Drive, Maxine's Hard Drive, College Park Photos, ASA, or Omeka)
