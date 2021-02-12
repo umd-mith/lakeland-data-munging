@@ -316,3 +316,12 @@ migrate_lda.py works similarly in that it reads data from LDA and adds it to LDA
 ### Migration Errors
 
 Any unexpected occurrences such as files that aren't able to be located, or  when an accession record can't be determined are written to a log. The process takes about 30 minutes to run, and can be rerun.
+
+### Storage Notes
+
+* LDT: 14GB 1290 files (x̄ = 11.1)
+* LDA: 28GB 3243 files (x̄ = 8.8)
+* Total: 53GB (not including derivative files)
+* 39 missing accession records  
+* 23 missing files  
+
