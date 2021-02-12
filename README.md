@@ -296,7 +296,7 @@ migrate_lda.py does not modify the existing LDT base and uses the following logi
 
 ### migrate_lda
 
-migrate_lda.py works similarly in that it reads data from LDA and adds it to LDA2. However it does not clean out data from LDA2 at the beginning because it is meant to augment data that has already been loaded into LDA2 by running migrate_lda.py.
+migrate_lda.py works similarly in that it reads data from LDA and adds it to LDA2. However it does not clean out data from LDA2 at the beginning because it is meant to augment data that has already been loaded into LDA2 by running migrate_ldt.py.
 
 1. Load LDA Subjects into the LDA2 Subjects and Events tables without duplicating entries
 2. Load LDA Entities into the LDA2 People, Organizations, Familes and Places tables without duplicating entries

@@ -234,6 +234,7 @@ def get_files(f):
         sha256 = get_sha256(path)
         size = path.stat().st_size
         ext = get_ext(path, mimetype)
+        duration = f['fields'].get('Duration')
 
         obj = {
             "Accession": accessions,
@@ -242,6 +243,7 @@ def get_files(f):
             "Size": size,
             "Extension": ext,
             "Original Filenames": f['fields'].get('File Path'),
+            "Duration": duration
         }
 
         # look for an existing file with the same sha256
@@ -300,7 +302,7 @@ for i in lda.tables['Items'].data:
         files.extend(get_files(f))
 
     if not files:
-        print("migrate_lda: no files for item", i)
+        print("migrate_lda: skipping, no files for item", i)
         continue
 
     creators = get_entities(i['fields'].get('Creator', []), 'People')
@@ -320,6 +322,8 @@ for i in lda.tables['Items'].data:
         i['fields'].get('Object Type'),
         i['fields'].get('Object Category')
     ]
+
+    # remove any None values
     otypes = list(filter(lambda o: o is not None, otypes))
 
     # normalize some of them
