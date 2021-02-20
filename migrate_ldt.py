@@ -6,7 +6,7 @@ import pathlib
 
 from dotenv import load_dotenv
 from ldt_images import get_orig
-from schema import Base, parse_name, get_sha256, get_ext, save_file
+from schema import Base, parse_name, get_sha256, save_file, get_ext
 
 load_dotenv()
 airtable_key = os.environ.get('AIRTABLE_KEY')
@@ -56,13 +56,10 @@ lak = Base('appqn0kIOXRo00kdN', airtable_key, {
 })
 
 # First wipe the slate clean.
-
-print('migrate_ldt: resetting base')
 lak.wipe()
 
 # Populate authorities
 
-print('migrate_ldt: adding People')
 for p in ldt.tables['People'].data:
     if 'Name' not in p['fields']:
         continue
@@ -74,7 +71,6 @@ for p in ldt.tables['People'].data:
         "Suffix Name": suffix
     })
 
-print('migrate_ldt: adding Places')
 for p in ldt.tables['Locations'].data:
     if 'Name' not in p['fields']:
         continue
@@ -82,7 +78,6 @@ for p in ldt.tables['Locations'].data:
         'Name': p['fields']['Name']
     })
 
-print('migrate_ldt: adding Subjects')
 for s in ldt.tables['Subjects'].data:
     if 'Name' not in s['fields']:
         continue
@@ -93,7 +88,6 @@ for s in ldt.tables['Subjects'].data:
 
 # Folders -> Accessions, Files
 
-print('migrate_ldt: adding Accessions & Files')
 
 # image id -> file id mapping for use later
 image_file_map = {}
@@ -151,22 +145,27 @@ for f in ldt.tables['Folder'].data:
         mimetype = magic.from_file(image_path.as_posix(), mime=True)
         sha256 = get_sha256(image_path)
         size = image_path.stat().st_size
-        ext = get_ext(image_path, mimetype)
-        save_file(image_path, sha256, ext)
+        ext = get_ext(mimetype)
+
+        location = save_file(
+            image_path,
+            accession['fields']['ID'],
+            sha256,
+            ext
+        )
+
         img = lak.tables['Files'].insert({
             "Accession": [accession['id']],
             "SHA256": sha256,
             "Format": mimetype,
             "Size": size,
-            "Extension": ext,
+            "Location": location,
             "Original Filenames": image_path.as_posix(),
             "Legacy Image ID": image['id']
         })
         image_file_map[image['id']] = img['id']
 
 # Images -> Items
-
-print('migrate_ldt: addding Images to Items')
 
 for image in ldt.tables['Images'].data:
 
@@ -219,8 +218,6 @@ for image in ldt.tables['Images'].data:
         })
 
 # Items -> Items
-
-print('migrate_ldt: dding Items')
 
 for item in ldt.tables['Items'].data:
 

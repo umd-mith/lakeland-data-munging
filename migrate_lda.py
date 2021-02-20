@@ -11,7 +11,7 @@ import tempfile
 from dotenv import load_dotenv
 from urllib.parse import urlparse
 from urllib.request import urlretrieve
-from schema import Base, parse_name, get_sha256, get_ext, csv_str, csv_list, save_file
+from schema import Base, parse_name, get_sha256, csv_str, csv_list, save_file, get_ext
 
 load_dotenv()
 airtable_key = os.environ.get('AIRTABLE_KEY')
@@ -54,7 +54,6 @@ lak = Base('appqn0kIOXRo00kdN', airtable_key, {
     "Families": {}
 })
 
-print('migrate_lda: adding Subjects')
 for s in lda.tables['Subjects'].data:
     s_type = s['fields'].get('Subject Category')
     if s_type == 'Concept':
@@ -68,7 +67,6 @@ for s in lda.tables['Subjects'].data:
         "Name": s['fields']['Name']
     })
 
-print('migrate_lda: adding Entities')
 for e in lda.tables['Entities'].data:
     obj = {'Name': e['fields'].get('Name')}
     extra = None
@@ -146,13 +144,14 @@ def get_google_drive(url):
 def get_accessions(f):
     accessions = []
 
-    if 'lakeland.umd.edu/asa' in f['fields'].get('Virtual Location', ''):
+    virtual_loc = f['fields'].get('Virtual Location', '')
+    if 'lakeland.umd.edu/asa' in virtual_loc:
         accessions.append(
             lak.tables['Accessions'].get_or_insert({
                 "Description": "ASA"
             })
         )
-    elif 'lakeland.umd.edu' in f['fields'].get('Virtual Location', ''):
+    elif 'lakeland.umd.edu' in virtual_loc:
         accessions.append(
             lak.tables['Accessions'].get_or_insert({
                 "Description": "Lakeland Omeka Instance Images"
@@ -160,7 +159,6 @@ def get_accessions(f):
         )
    
     files = f['fields'].get('File Path', '')
-
     if 'Mary Sies Hard Drive' in files:
         accessions.append(
             lak.tables['Accessions'].get_or_insert({
@@ -182,10 +180,7 @@ def get_accessions(f):
             })
         )
 
-    if len(accessions) == 0:
-        print('migrate_lda: unknown accession for files', f)
-
-    return [a['id'] for a in accessions]
+    return accessions
 
 def get_paths(f):
 
@@ -221,27 +216,31 @@ def get_paths(f):
         except requests.exceptions.HTTPError as e:
             print("migrate_lda: encountered HTTP error when downloading loc: {}".format(e))
 
-    if len(paths) == 0:
-        print("migrate_lda: couldn't determine file(s) for:", f)
-
     return paths
 
 def get_files(f):
+
+    # get the accession that the file is a part of (could be more than one)
+    # because of duplication within hard drives that have been processed
+    # if there aren't any we can't save the file so we need to stop
+
+    accessions = get_accessions(f)
+    if len(accessions) == 0:
+        return []
+
     files = []
     for path in get_paths(f):
-        accessions = get_accessions(f)
         mimetype = magic.from_file(path.as_posix(), mime=True)
         sha256 = get_sha256(path)
         size = path.stat().st_size
-        ext = get_ext(path, mimetype)
+        ext = get_ext(mimetype)
         duration = f['fields'].get('Duration')
 
         obj = {
-            "Accession": accessions,
+            "Accession": [a['id'] for a in accessions],
             "SHA256": sha256,
             "Format": mimetype,
             "Size": size,
-            "Extension": ext,
             "Original Filenames": f['fields'].get('File Path'),
             "Duration": duration
         }
@@ -259,12 +258,31 @@ def get_files(f):
 
         # otherwise we need to insert a new row
         else:
-            # only delete things that were downloaded to tmp
-            delete = True if str(path).startswith("tmp") else False
-            save_file(path, sha256, ext, delete=delete)
+
+            # save the file to storage using the first accession, 
+            # checksum, sha256, and file extension to determine the path
+            # the relative path to a storage root is returned for saving
+            # in the Airtable Files table as Location.
+            #
+            # Note: a file can be part of more than one accession, so 
+            # but the file should only live at one physical location and 
+            # not be duplicated so we pick the first one.
+
+            obj['Location'] = save_file(
+                path,
+                accessions[0]['fields']['ID'], # can be more than one
+                sha256,
+                ext
+            )
+
             afile = lak.tables['Files'].insert(obj)
 
+            # only delete things that were downloaded to tmp
+            if str(path).startswith("tmp"):
+                os.remove(path)
+
         files.append(afile)
+
     return [f['id'] for f in files]
 
 def get_entities(entities, lak_table):
@@ -294,15 +312,20 @@ def replace(s1, s2, l):
             new_l.append(s)
     return list(set(new_l))
 
-print("migrate_lda: adding Items & Files")
 for i in lda.tables['Items'].data:
-
     files = []
     for f in i['fields']['Files']:
-        files.extend(get_files(f))
+        new_files = get_files(f)
 
-    if not files:
-        print("migrate_lda: skipping, no files for item", i)
+        # if files can't be found stop right away
+        if len(new_files) == 0:
+            files = []
+            break
+
+        files.extend(new_files)
+
+    if len(files) == 0:
+        print("migrate_lda: no files for item: {}".format(f))
         continue
 
     creators = get_entities(i['fields'].get('Creator', []), 'People')

@@ -5,6 +5,7 @@ import magic
 import shutil
 import hashlib
 import pathlib
+import mimetypes
 
 from airtable import Airtable
 
@@ -157,33 +158,6 @@ def get_sha256(f):
         d.update(chunk)
     return d.hexdigest()
 
-def get_ext(p, mimetype):
-    ext = p.suffix.strip('.')
-    if not ext:
-        if mimetype == 'image/jpeg':
-            ext = 'jpg'
-        elif mimetype == 'image/tiff':
-            ext = 'tiff'
-        elif mimetype == 'audio/mpeg':
-            ext = 'mp3'
-        elif mimetype == 'video/mpeg':
-            ext = 'mp4'
-        elif mimetype == 'audio/x-wav':
-            ext = 'wav'
-        elif mimetype == 'video/mp4':
-            ext = 'mp4'
-        elif mimetype == 'application/pdf':
-            ext = 'pdf'
-        elif mimetype == 'video/x-ms-asf':
-            ext = 'asf'
-        elif mimetype == 'video/quicktime':
-            ext = 'mov'
-        elif mimetype == 'audio/x-m4a':
-            ext = 'm4a'
-        else:
-            raise(Exception('Unknown extension for {}'.format(mimetype)))
-    return ext
-
 def csv_list(s):
     "Parse a CSV row into a list"
     if "," in s and '"' not in s:
@@ -196,9 +170,25 @@ def csv_str(l):
     csv.writer(out).writerow(l)
     return out.getvalue().strip()
 
-def save_file(src, sha256, ext, delete=False):
+def save_file(src, accession_dir, sha256, ext):
+    ext = ext.lstrip('.')
     filename = "{}.{}".format(sha256, ext)
-    dst = pathlib.Path('/mnt/data/') / filename
-    shutil.copyfile(src, dst)
-    if delete:
-        src.unlink()
+    rel_path = pathlib.Path(str(accession_dir)) / filename
+    abs_path = pathlib.Path("/mnt/data") / rel_path
+
+    # make the directory if needed
+    if not abs_path.parent.is_dir():
+        abs_path.parent.mkdir(parents=True)
+
+    # copy the file
+    shutil.copyfile(src, abs_path)
+
+    return str(rel_path)
+
+def get_ext(mimetype):
+    result = mimetypes.guess_extension(mimetype)
+    if not result and mimetype == 'image/vnd.adobe.photoshop':
+        result = '.psd'
+    elif result is None:
+        result = ''
+    return result
