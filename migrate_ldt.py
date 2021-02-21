@@ -160,7 +160,7 @@ for f in ldt.tables['Folder'].data:
             "Format": mimetype,
             "Size": size,
             "Location": location,
-            "Original Filenames": image_path.as_posix(),
+            "Original Filenames": image_path.as_posix().replace('/home/ubuntu/lakeland-data-munging/', ''),
             "Legacy Image ID": image['id']
         })
         image_file_map[image['id']] = img['id']
