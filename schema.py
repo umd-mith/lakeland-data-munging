@@ -160,9 +160,12 @@ def get_sha256(f):
 
 def csv_list(s):
     "Parse a CSV row into a list"
-    if "," in s and '"' not in s:
+    if not s or s == '':
+        return []
+    elif "," in s and '"' not in s:
         return [s]
-    return next(csv.reader(io.StringIO(s)))
+    else:
+        return next(csv.reader(io.StringIO(s)))
 
 def csv_str(l):
     "Turn a list into a CSV row"
