@@ -33,7 +33,7 @@ lda = Base("app9sKntqCyBwawhA", airtable_key, {
         "Subjects": "Subjects",
         "Source/Provenance": "Entities",
         "Interviewer": "Entities",
-        "Interviewee": "Entities"
+        "Interviewee": "Entities",
     },
     "Files": {},
     "Subjects": {},
@@ -79,16 +79,22 @@ for e in lda.tables['Entities'].data:
             "First Name": f,
             "Middle Name": m,
             "Last Name": l,
-            "Suffix Name": s
+            "Suffix Name": s,
+            "Source Code": e["fields"].get("Source Code"),
+            "Alternate Name": e["fields"].get("Alternate Name"),
         }
         if e_type == 'Person (LCHP Team)':
             extra = {'LCHP Staff': True}
     elif e_type == 'Corporate Body':
         table_name = 'Organizations'
+        for col in ["Source Code", "Address", "Latitude", "Longitude"]:
+            obj[col] = e["fields"].get(col)
     elif e_type == 'Family':
         table_name = 'Families'
     elif e_type == 'Place':
         table_name = 'Places'
+        for col in ["Source Code", "Address", "Latitude", "Longitude"]:
+            obj[col] = e["fields"].get(col)
     else:
         print('migrate_lda: unknown entity type:', e)
         continue
@@ -166,7 +172,7 @@ def get_accessions(f):
             })
         )
 
-    if "Maxine Hard Drive" in files:
+    if "Maxine Hard Drive" in files or "Maxine Gross Hard Drive" in files:
         accessions.append(
             lak.tables['Accessions'].get_or_insert({
                 "Description": "Maxine Gross Hard Drive: Images"
@@ -177,6 +183,13 @@ def get_accessions(f):
         accessions.append(
             lak.tables['Accessions'].get_or_insert({
                 "Description": "College Park Photos"
+            })
+        )
+
+    if 'LCHP Accession 2021' in files:
+        accessions.append(
+            lak.tables['Accessions'].get_or_insert({
+                "Description": "LCHP Accession 2021"
             })
         )
 
@@ -191,8 +204,15 @@ def get_paths(f):
 
     if file_paths:
         # get the first original path and look for it in nfs mount
-        orig_paths = csv_list(file_paths)
-        path = drive / orig_paths[0]
+        orig_path = csv_list(file_paths)[0]
+
+        # these are relative to a different base directory one level up to keep
+        # things interesting I guess. thankfully all this code can be jettisoned
+        orig_path = orig_path.replace('/Projects/lakeland-digital-archive/object files/LCHP Accession 2021', '../LCHP Accession 2021')
+
+        # get the full path on the nfs share
+        path = drive / orig_path
+
         if not path.is_file():
             print("migrate_lda: file {} doesn't exist for {}".format(path, f))
         else:
@@ -295,8 +315,16 @@ def get_entities(entities, lak_table):
                 "First Name": f,
                 "Last Name": l,
                 "Middle Name": m,
-                "Suffix Name": s
+                "Suffix Name": s,
+                "Source Code": entity['fields'].get('Source Code'),
+                "Alternate Name": entity['fields'].get('Alternate Name')
             }
+        elif lak_table in ['Places', 'Organizations']:
+            fields['Source Code'] = entity['fields'].get('Source Code')
+            fields['Address'] = entity['fields'].get('Address')
+            fields['Latitude'] = entity['fields'].get('Latitude')
+            fields['Longitude'] = entity['fields'].get('Longitude')
+
         lak_obj = lak.tables[lak_table].get_or_insert(fields)
         entity_ids.append(lak_obj['id'])
     return entity_ids
@@ -324,10 +352,6 @@ for i in lda.tables['Items'].data:
 
         files.extend(new_files)
 
-    if len(files) == 0:
-        print("migrate_lda: no files for item: {}".format(f))
-        continue
-
     creators = get_entities(i['fields'].get('Creator', []), 'People')
     interviewers = get_entities(i['fields'].get('Interviewer', []), 'People')
     interviewees = get_entities(i['fields'].get('Interviewee', []), 'People')
@@ -339,6 +363,12 @@ for i in lda.tables['Items'].data:
     places = get_entities(places, 'Places')
     orgs = filter(lambda p: p['fields']['Entity Category'] == 'Corporate Body', i['fields'].get('Places/Organizations', []))
     orgs = get_entities(orgs, 'Organizations')
+
+    # disentangle Source (Provenance) into Source (People) and Sources
+    # (Organizations)
+    #source_people = filter(lambda s: s['fields']['Entity Category'] == 'Person', i['fields'].get('Source (Provenance)'))
+    #source_orgs = filter(lambda s: s['fields']['Entity Category'] == 'Corporate Body', i['fields'].get('Source (Provenance)'))
+    #source_fams = filter(lambda s: s['fields']['Entity Category'] == 'Family', i['fields'].get('Source (Provenance)'))
 
     # collect the Object Type and Object Category values
     otypes = [
@@ -361,6 +391,12 @@ for i in lda.tables['Items'].data:
         "Type": otypes,
         "Files": files,
         "Created": i['fields'].get('Creation Date'),
+        #"Source (Provenance)": i['fields'].get('Source (Provenance)'),
+        "In Lakeland Book?": i['fields'].get('In Lakeland Book?'),
+        "Lakeland Book Chapter": i['fields'].get('Lakeland Book Chapter'),
+        "Lakeland Book Page #": i['fields'].get('Lakeland Book Page #'),
+        "Used in Lakeland Video?": i['fields'].get('Used in Lakeland Video?'),
+        "Flag for Removal?": i['fields'].get('Flag for Removal?'),
         "Creator": creators,
         "Interviewers": interviewers,
         "Interviewees": interviewees,
