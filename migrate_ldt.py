@@ -276,3 +276,4 @@ for item in ldt.tables['Items'].data:
             "Files": list(files),
             "Legacy Item ID": item['fields'].get('Readable Item ID')
         })
+

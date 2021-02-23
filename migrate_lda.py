@@ -31,7 +31,7 @@ lda = Base("app9sKntqCyBwawhA", airtable_key, {
         "People": "Entities",
         "Places/Organizations": "Entities",
         "Subjects": "Subjects",
-        "Source/Provenance": "Entities",
+        "Source (Provenance)": "Entities",
         "Interviewer": "Entities",
         "Interviewee": "Entities",
     },
@@ -359,16 +359,23 @@ for i in lda.tables['Items'].data:
     subjects = get_entities(i['fields'].get('Subjects', []), 'Subjects')
 
     # disentangle places and organizations
+
     places = filter(lambda p: p['fields']['Entity Category'] == 'Place', i['fields'].get('Places/Organizations', []))
     places = get_entities(places, 'Places')
+
     orgs = filter(lambda p: p['fields']['Entity Category'] == 'Corporate Body', i['fields'].get('Places/Organizations', []))
     orgs = get_entities(orgs, 'Organizations')
 
-    # disentangle Source (Provenance) into Source (People) and Sources
-    # (Organizations)
-    #source_people = filter(lambda s: s['fields']['Entity Category'] == 'Person', i['fields'].get('Source (Provenance)'))
-    #source_orgs = filter(lambda s: s['fields']['Entity Category'] == 'Corporate Body', i['fields'].get('Source (Provenance)'))
-    #source_fams = filter(lambda s: s['fields']['Entity Category'] == 'Family', i['fields'].get('Source (Provenance)'))
+    # disentangle Source (Provenance)
+
+    source_people = filter(lambda s: s['fields']['Entity Category'] == 'Person', i['fields'].get('Source (Provenance)', []))
+    source_people = get_entities(source_people, 'People')
+
+    source_orgs = filter(lambda s: s['fields']['Entity Category'] == 'Corporate Body', i['fields'].get('Source (Provenance)', []))
+    source_orgs = get_entities(source_orgs, 'Organizations')
+
+    source_fams = filter(lambda s: s['fields']['Entity Category'] == 'Family', i['fields'].get('Source (Provenance)', []))
+    source_fams = get_entities(source_fams, 'Families')
 
     # collect the Object Type and Object Category values
     otypes = [
@@ -391,7 +398,6 @@ for i in lda.tables['Items'].data:
         "Type": otypes,
         "Files": files,
         "Created": i['fields'].get('Creation Date'),
-        #"Source (Provenance)": i['fields'].get('Source (Provenance)'),
         "In Lakeland Book?": i['fields'].get('In Lakeland Book?'),
         "Lakeland Book Chapter": i['fields'].get('Lakeland Book Chapter'),
         "Lakeland Book Page #": i['fields'].get('Lakeland Book Page #'),
@@ -403,6 +409,53 @@ for i in lda.tables['Items'].data:
         "People": people,
         "Places": places,
         "Organizations": orgs,
-        "Subjects": subjects
+        "Subjects": subjects,
+        "Source (People)": source_people,
+        "Source (Organizations)": source_orgs,
+        "Source (Families)": source_fams
     })
+
+# add interview transcripts as files attached to items
+
+for item in lda.tables['Items'].data:
+    files = []
+    lak_item = None
+
+    for interview in item['fields'].get('Interview Summary', []):
+        old_id = item['fields'].get('Legacy ID-UMD')
+        lak_item = lak.tables['Items'].find({'Legacy UMD ID': old_id}, first=True)
+
+        orig_filename = interview['filename']
+        path = localize(interview['url'])
+        mimetype = magic.from_file(path.as_posix(), mime=True)
+        sha256 = get_sha256(path)
+        size = path.stat().st_size
+        ext = get_ext(mimetype)
+
+        accession = lak.tables['Accessions'].find({"Description": "LCHP Accession 2021"}, first=True)
+
+        location = save_file(
+            path,
+            accession['fields']['ID'],
+            sha256,
+            ext
+        )
+
+        afile = lak.tables['Files'].insert({
+            "Accession": [accession['id']],
+            "SHA256": sha256,
+            "Format": mimetype,
+            "Size": size,
+            "Original Filenames": orig_filename,
+            "Location": location
+        })
+ 
+        # only delete things that were downloaded to tmp
+        if str(path).startswith("tmp"):
+            os.remove(path)
+
+        files.append(afile['id'])
+
+    if lak_item is not None:
+        lak.tables['Items'].update(lak_item['id'], {"Files": files})
 
