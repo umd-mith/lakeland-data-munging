@@ -357,6 +357,7 @@ for i in lda.tables['Items'].data:
     interviewees = get_entities(i['fields'].get('Interviewee', []), 'People')
     people = get_entities(i['fields'].get('People', []), 'People')
     subjects = get_entities(i['fields'].get('Subjects', []), 'Subjects')
+    events = get_entities(i['fields'].get('Events', []), 'Events')
 
     # disentangle places and organizations
 
@@ -406,6 +407,7 @@ for i in lda.tables['Items'].data:
         "Creator": creators,
         "Interviewers": interviewers,
         "Interviewees": interviewees,
+        "Events": events,
         "People": people,
         "Places": places,
         "Organizations": orgs,
